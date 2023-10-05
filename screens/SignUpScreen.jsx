@@ -9,7 +9,7 @@ export default function SignUpScreen() {
         style={styles.BackBtn}
         onPress={() => navigation.goBack()}
         >
-            <BackArrow  width={22} height= {16}/>
+            <Text>Retour</Text>
         </TouchableOpacity>
         </SafeAreaView>
         <Text style={styles.text}>Créer un {'\n'}compte. </Text>
