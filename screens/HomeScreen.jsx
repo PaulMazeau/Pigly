@@ -1,12 +1,16 @@
 import { StyleSheet, Text, View, Button } from 'react-native';
 import React from 'react';
+import RestaurantCarroussel from '../components/Home/RestaurantCarroussel';
+import { main } from '../constants/color';
+import RestaurantTag from '../components/Restaurant/RestaurantTag';
+import ImageCarroussel from '../components/Home/ImageCarroussel';
 
 export default function HomeScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text>Bienvenue sur Pigly app, l'app pour bien manger</Text>
+      <ImageCarroussel/>
       <Button 
-        title="Aller au MoodPicker" 
+        title="Aller sur une page restaurant" 
         onPress={() => navigation.navigate('RestaurantScreen')}
       />
     </View>
@@ -16,6 +20,7 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: main.BgColor,
     justifyContent: 'center',
     alignItems: 'center'
   }

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
 import React from 'react'
 
 export default function SignInScreen() {
@@ -24,7 +24,7 @@ export default function SignInScreen() {
                 />
                 <TextInput 
                     style={styles.input}
-                    placeholder="Password"
+                    placeholder="Mot de passe"
                     onChangeText={console.log('Mot de passe')}
                     autoCapitalize="none"
                     autoCorrect={false}
@@ -36,7 +36,7 @@ export default function SignInScreen() {
                 onPress={console.log('Inscription')}
                 style={styles.button}
             >
-                <Text>Sign In</Text>
+                <Text>Se connecter</Text>
             </TouchableOpacity>
 
             <View style={styles.rowseparator}>
@@ -49,19 +49,19 @@ export default function SignInScreen() {
                 onPress={() => console.log('google')}
                 style={styles.buttonGoogle}
             >
-                <Text>Sign In with google</Text>
+                <Text>Se connecter avec google</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => console.log('facebook')}
                 style={styles.buttonFacebook}
             >
-                <Text style={styles.txtBtn2}>Sign In with facebook</Text>
+                <Text style={styles.txtBtn2}>Se connecter avec facebook</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => navigation.navigate('SignUp')}
                 style={styles.button2}
             >
-                <Text style={styles.txtBtn2}>Don't have an account? Sign Up now</Text>
+                <Text style={styles.txtBtn2}>Tu n'as pas de compte? Inscris toi</Text>
             </TouchableOpacity>
         </View>
     )

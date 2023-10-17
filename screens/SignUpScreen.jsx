@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
 import React from 'react'
 
-export default function SignUpScreen() {
+export default function SignUpScreen({ navigation }) {
   return (
     <View style={styles.container}> 
         <SafeAreaView>
@@ -16,7 +16,7 @@ export default function SignUpScreen() {
         <View style={styles.main}>
             <TextInput 
                 style={styles.input}
-                placeholder="First Name"
+                placeholder="Prénom"
                 onChangeText={() => console.log('First time')}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -24,7 +24,7 @@ export default function SignUpScreen() {
             />
             <TextInput 
                 style={styles.input}
-                placeholder="Last Name"
+                placeholder="Nom de famille"
                 onChangeText={() => console.log('Last Name')}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -40,7 +40,7 @@ export default function SignUpScreen() {
             />
             <TextInput 
                 style={styles.input}
-                placeholder="Password"
+                placeholder="Mot de passe"
                 onChangeText={() => console.log('Mot de passe')}
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -52,7 +52,7 @@ export default function SignUpScreen() {
             onPress={() => SignUpUser(email, password, firstName, lastName)}
             style={styles.button}
         >
-            <Text>Sign Up</Text>
+            <Text>S'inscrire</Text>
         </TouchableOpacity>
         
         <View style={styles.rowseparator}>
@@ -65,20 +65,20 @@ export default function SignUpScreen() {
             onPress={() => console.log('google')}
             style={styles.buttonGoogle}
         >
-            <Text>Sign Up with google</Text>
+            <Text>S'inscrire avec google</Text>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => console.log('facebook')}
             style={styles.buttonFacebook}
         >
-            <Text style={styles.txtBtn2}>Sign Up with facebook</Text>
+            <Text style={styles.txtBtn2}>S'inscrire avec facebook</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-            onPress={() => console.log('prout')}
+            onPress={() => navigation.navigate('SignIn')}
             style={styles.button2}
         >
-            <Text style={styles.txtBtn2}>Already have an account? Sign Up now</Text>
+            <Text style={styles.txtBtn2}>Tu as déjà un compte? Connecte toi</Text>
         </TouchableOpacity>
     </View>
 )
