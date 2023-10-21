@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Dimensions } from 'react-native';
 import Animated, {
   Extrapolate,
@@ -7,6 +7,8 @@ import Animated, {
   useSharedValue
 } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
+import ImageCarroussel from './ImageCarroussel';
+import { main } from '../../constants/color';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
 const colors = [
@@ -19,17 +21,15 @@ const colors = [
 ];
 
 function RestaurantCarroussel() {
-  const [isVertical, setIsVertical] = useState(false);
   const progressValue = useSharedValue(0);
 
   return (
     <View style={{ alignItems: "center" }}>
       <Carousel
-        style={{ width: PAGE_WIDTH * 0.86 }}
+        style={{ width: PAGE_WIDTH }}
         loop
-        vertical={isVertical}
         width={PAGE_WIDTH}
-        height={PAGE_WIDTH * 0.6}
+        height={PAGE_WIDTH}
         onProgressChange={(_, absoluteProgress) => progressValue.value = absoluteProgress}
         mode="parallax"
         modeConfig={{
@@ -38,37 +38,25 @@ function RestaurantCarroussel() {
         }}
         data={colors}
         renderItem={({ index }) => (
-          <View
-            key={index}
-            style={{
-              backgroundColor: colors[index],
-              width: PAGE_WIDTH * 0.8,
-              height: PAGE_WIDTH * 0.5,
-              borderRadius: 16
-            }}
-          />
+          <ImageCarroussel/>
         )}
       />
 
       <View
         style={{
-          flexDirection: isVertical ? "column" : "row",
+          flexDirection: "row",
           justifyContent: "space-between",
-          width: isVertical ? 10 : 100,
+          width: 100,
           alignSelf: "center",
-          position: isVertical ? "absolute" : "relative",
-          right: isVertical ? 5 : undefined,
-          top: isVertical ? 40 : undefined,
+          position: "relative",
         }}
       >
-        {colors.map((backgroundColor, index) => (
+        {colors.map((_, index) => (
           <PaginationItem
             key={index}
-            backgroundColor={backgroundColor}
             animValue={progressValue}
             index={index}
             length={colors.length}
-            isRotate={isVertical}
           />
         ))}
       </View>
@@ -77,7 +65,7 @@ function RestaurantCarroussel() {
 }
 
 function PaginationItem(props) {
-  const { animValue, index, length, backgroundColor, isRotate } = props;
+  const { animValue, index, length } = props;
   const width = 10;
 
   const animStyle = useAnimatedStyle(() => {
@@ -106,19 +94,18 @@ function PaginationItem(props) {
   return (
     <View
       style={{
-        backgroundColor: 'white',
+        backgroundColor: 'gray',
         width,
         height: width,
         borderRadius: 50,
         overflow: 'hidden',
-        transform: [{ rotateZ: isRotate ? '90deg' : '0deg' }]
       }}
     >
       <Animated.View
         style={[
           {
             borderRadius: 50,
-            backgroundColor,
+            backgroundColor: main.LogoBlack, // La couleur du point
             flex: 1,
           },
           animStyle,

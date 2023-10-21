@@ -1,10 +1,15 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, TouchableWithoutFeedback } from 'react-native';
 import ArrowUp from '../../assets/icons/ArrowUp.svg'
+import { useNavigation } from '@react-navigation/native';
 
 function ImageCarroussel() {
-    return (
-        <View style={styles.container}>
+
+    const navigation = useNavigation();
+
+        return (
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen')}>
+            <View style={styles.container}>
            <ImageBackground source={require('../../assets/images/La_Felicita.jpg')} resizeMode="cover" style={styles.image}>
             <View style={styles.bottom}>
                 <View>
@@ -18,15 +23,16 @@ function ImageCarroussel() {
             </View>
             </ImageBackground> 
         </View>
+        </TouchableWithoutFeedback>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '90%',
+        width: '100%',
         height: 400,
         borderRadius: 25,
-        overflow: 'hidden'
+        overflow: 'hidden',
     },
     image: {
         width: '100%',

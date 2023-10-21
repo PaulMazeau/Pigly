@@ -25,6 +25,16 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "fonts": [
+      {
+        "fontFamily": "ClashDisplay",
+        "fonts": [
+          {
+            "asset": "./assets/fonts/ClashDisplay-Bold.otf"
+          }
+        ]
+      }
+    ]
   }
 }
