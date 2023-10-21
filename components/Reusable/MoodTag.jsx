@@ -1,12 +1,18 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { main } from '../../constants/color'
+import { useNavigation } from '@react-navigation/native';
 
 export default function MoodTag() {
+
+    const navigation = useNavigation();
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Romantique</Text>
-        </View>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+            <View style={styles.container}>
+                <Text style={styles.text}>Romantique</Text>
+            </View>
+        </TouchableOpacity>
     )
 }
 
