@@ -82,9 +82,9 @@ function RestaurantMoodCard() {
         <Button title={isExpanded ? "Voir moins" : "Voir plus"} onPress={toggleCards} />
       </View>
       <View style={styles.cardContainer}>
-        <TouchableWithoutFeedback onPress={() => console.log('prout')}><Animated.View style={[styles.card, card1Style, cardShadow]}/></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => console.log('prout2')}><Animated.View style={[styles.card, card2Style, cardShadow]}/></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => console.log('prout3')}><Animated.View style={[styles.card, card3Style, cardShadow]}/></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card1Style, cardShadow]}/></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card2Style, cardShadow]}/></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card3Style, cardShadow]}/></TouchableWithoutFeedback>
       </View>
     </Animated.View>
   );
