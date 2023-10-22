@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'black',
         backgroundColor: main.LogoPink,
-        height: 244,
+        height: 260,
         borderRadius: 14
     },
 })

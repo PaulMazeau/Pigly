@@ -9,10 +9,10 @@ import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
 
 const RestaurantScreen = () => {
   return (
-    <View style={styles.container}>
+    <View style={styles.page}>
       <StatusBar style="light"/>
       <Image source={require('../assets/images/La_Felicita.jpg')} style={styles.image}/>
-      <ScrollView showsVerticalScrollIndicator={false}> 
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}> 
         <Text style={styles.title}>La felicita</Text>
         <View style={styles.tagContainer}>
           <RestaurantTag text="Bruyant" />
@@ -21,6 +21,7 @@ const RestaurantScreen = () => {
           <RestaurantTag text="Italien" />
           <RestaurantTag text="€€€€" />
         </View>
+
         <View style={styles.gridContainer}>
           <View style={styles.leftColumn}>
             <RestaurantDescription />
@@ -30,6 +31,7 @@ const RestaurantScreen = () => {
             <RestaurantMap />
           </View>
         </View>
+
         <RestaurantMenu/>
       </ScrollView>
     </View>
@@ -37,9 +39,12 @@ const RestaurantScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  page: {
     flex: 1,
     backgroundColor: '#FFFFFF',
+  },
+  container: {
+    padding: 14
   },
   image: {
     width: '100%',
@@ -48,7 +53,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginVertical: 10
+    marginBottom: 10
   },
   tagContainer: {
     flexDirection: 'row',
@@ -58,7 +63,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 1,
-    marginTop: 20
+    marginTop: 20,
+    marginBottom: 10
   },
   leftColumn: {
     flex: 1, 
