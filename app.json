@@ -15,26 +15,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Cette application nécessite l'accès à votre emplacement pour fonctionner correctement."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["ACCESS_FINE_LOCATION"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "fonts": [
-      {
-        "fontFamily": "ClashDisplay",
-        "fonts": [
-          {
-            "asset": "./assets/fonts/ClashDisplay-Bold.otf"
-          }
-        ]
-      }
-    ]
+    }
   }
 }
