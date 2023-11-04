@@ -13,7 +13,7 @@ export default function HomeScreen({ navigation }) {
       <RestaurantCarroussel/>
       <View style={styles.subTitleBlock}>
         <Text style={styles.subTitle}>Les 10 meilleurs</Text>
-        <RestaurantTag/>
+        <RestaurantTag text='Lyon'/>
       </View>
       <Top10Slider/>
     </View>

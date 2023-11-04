@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { StyleSheet, Text, Animated, View, Button, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { main } from '../../constants/color';
 
 function RestaurantMoodCard() {
   const navigation = useNavigation();
@@ -41,7 +42,7 @@ function RestaurantMoodCard() {
         outputRange: [0, 0], // Ne bouge pas
       })
     }],
-    backgroundColor: 'blue',
+    backgroundColor: main.LogoBlack,
     zIndex: 3,
   };
 
@@ -56,7 +57,7 @@ function RestaurantMoodCard() {
       inputRange: [0, 1],
       outputRange: ['95%', '100%'], // Réduire la width quand ce n'est pas étendu
     }),
-    backgroundColor: 'green',
+    backgroundColor: main.LogoBlack,
     zIndex: 2,
   };
 
@@ -71,7 +72,7 @@ function RestaurantMoodCard() {
       inputRange: [0, 1],
       outputRange: ['90%', '100%'], // Réduire davantage la width quand ce n'est pas étendu
     }),
-    backgroundColor: 'red',
+    backgroundColor: main.LogoBlack,
     zIndex: 1,
   };
 
@@ -82,9 +83,21 @@ function RestaurantMoodCard() {
         <Button title={isExpanded ? "Voir moins" : "Voir plus"} onPress={toggleCards} />
       </View>
       <View style={styles.cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card1Style, cardShadow]}/></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card2Style, cardShadow]}/></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card3Style, cardShadow]}/></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}>
+          <Animated.View style={[styles.card, card1Style, cardShadow]}>
+            <Text style={styles.CardTitle}>Romantique</Text>
+            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
+          </Animated.View>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card2Style, cardShadow]}>
+            <Text style={styles.CardTitle}>Romantique</Text>
+            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
+          </Animated.View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card3Style, cardShadow]}>
+            <Text style={styles.CardTitle}>Romantique</Text>
+            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
+          </Animated.View>
+        </TouchableWithoutFeedback>
       </View>
     </Animated.View>
   );
@@ -107,10 +120,20 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     height: 70,
-    justifyContent: 'center',
-    alignItems: 'center',
+    padding: 8,
     borderRadius: 10,
     marginBottom: 12,
+    backgroundColor: main.LogoBlack
+  },
+  CardTitle: {
+    fontSize: 24, 
+    fontWeight: '700',
+    color: main.LogoPink
+  },
+  CardSubTitle: {
+    fontSize: 16, 
+    fontWeight: '500',
+    color: '#939393'
   },
   Title: {
     fontSize: 20,
