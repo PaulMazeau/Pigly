@@ -3,16 +3,18 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FB_AUTH } from '../firebaseconfig';
 import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react'
+import { useAuth } from '../context/AuthContext';
 
 export default function SignInScreen() {
 
     const navigation = useNavigation();
+    const { signIn } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const SignInUser = () => {
-        signInWithEmailAndPassword(FB_AUTH, email, password)
-            .then((userCredential) => {
+        signIn(email, password)
+            .then(() => {
                 navigation.reset({
                     index: 0,
                     routes: [{ name: 'Main' }],
@@ -22,7 +24,6 @@ export default function SignInScreen() {
                 console.error('Erreur lors de la connexion:', error);
             });
     };
-    
 
   return (
     <View style={styles.container}>
