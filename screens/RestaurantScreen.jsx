@@ -16,7 +16,7 @@ const RestaurantScreen = () => {
   return (
     <View style={styles.page}>
       <StatusBar style="light"/>
-      <Image source={require('../assets/images/La_Felicita.jpg')} style={styles.image}/>
+      <Image source={{ uri: restaurant?.photo[0] }} style={styles.image}/>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}> 
         <Text style={styles.title}>{restaurant?.nom}</Text>
         <View style={styles.tagContainer}>

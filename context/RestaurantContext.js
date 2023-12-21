@@ -1,15 +1,16 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { FB_DB } from '../firebaseconfig'; // Ajustez le chemin selon la structure de votre projet
+import { collection, onSnapshot } from 'firebase/firestore';
 
 const RestaurantContext = createContext();
 
 export const RestaurantProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);
-  const restaurantsCollectionRef = FB_DB.collection('restaurants');
+  const restaurantsCollectionRef = collection(FB_DB, 'restaurants');
 
   useEffect(() => {
     const fetchRestaurants = () => {
-      restaurantsCollectionRef.onSnapshot((querySnapshot) => {
+      onSnapshot(restaurantsCollectionRef, (querySnapshot) => {
         const data = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()

@@ -1,12 +1,17 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { main } from '../../constants/color'
+import RestaurantContext from '../../context/RestaurantContext';
 
 export default function RestaurantDescription() {
+
+    const { restaurants } = useContext(RestaurantContext);
+    const restaurant = restaurants[0];
+
     return (
         <View style={styles.container}>
             <Text style={styles.description}>
-                La Felicità, c'est un immense food-market en direct producteurs où tout est 100% fait maison. 4.500 m2, 8 cuisines...
+                {restaurant?.description}
             </Text>
         </View>
     )
