@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
@@ -6,14 +6,19 @@ import RestaurantTag from '../components/Restaurant/RestaurantTag';
 import RestaurantMap from '../components/Restaurant/RestaurantMap';
 import RestaurantReview from '../components/Restaurant/RestaurantReview';
 import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
+import RestaurantContext from '../context/RestaurantContext';
 
 const RestaurantScreen = () => {
+
+  const { restaurants } = useContext(RestaurantContext);
+  const restaurant = restaurants[0];
+
   return (
     <View style={styles.page}>
       <StatusBar style="light"/>
       <Image source={require('../assets/images/La_Felicita.jpg')} style={styles.image}/>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}> 
-        <Text style={styles.title}>La felicita</Text>
+        <Text style={styles.title}>{restaurant?.nom}</Text>
         <View style={styles.tagContainer}>
           <RestaurantTag text="Bruyant" />
           <RestaurantTag text="Food market" />
