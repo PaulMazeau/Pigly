@@ -1,10 +1,9 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import {getAuth} from "firebase/auth";
+import { getAuth, initializeAuth, getReactNativePersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import {getStorage} from 'firebase/storage'
-import {PROJECTID, APIKEY, AUTHDOMAIN, STORAGEBUCKET, MESSAGINGSENDERID, APPID, MEASUREMENTID} from '@env'
-
+import { getStorage } from 'firebase/storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PROJECTID, APIKEY, AUTHDOMAIN, STORAGEBUCKET, MESSAGINGSENDERID, APPID, MEASUREMENTID } from '@env';
 
 const firebaseConfig = {
     apiKey: APIKEY,
@@ -14,10 +13,19 @@ const firebaseConfig = {
     messagingSenderId: MESSAGINGSENDERID,
     appId: APPID,
     measurementId: MEASUREMENTID
-  };
+};
 
 // Initialize Firebase
-export const FB_APP = initializeApp(firebaseConfig);
-export const FB_AUTH = getAuth(FB_APP);
-export const FB_DB = getFirestore(FB_APP);
-export const FB_STORE = getStorage(FB_APP);
+const FB_APP = initializeApp(firebaseConfig);
+
+// Configure Firebase Auth with AsyncStorage persistence
+const FB_AUTH = getAuth(FB_APP);
+initializeAuth(FB_APP, {
+  persistence: getReactNativePersistence(AsyncStorage)
+});
+
+const FB_DB = getFirestore(FB_APP);
+const FB_STORE = getStorage(FB_APP);
+
+// Export the initialized services
+export { FB_APP, FB_AUTH, FB_DB, FB_STORE };

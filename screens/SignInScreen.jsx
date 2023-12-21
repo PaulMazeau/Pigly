@@ -1,10 +1,24 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { FB_AUTH } from '../firebaseconfig';
 import { useNavigation } from '@react-navigation/native';
-import React from 'react'
+import React, {useState} from 'react'
 
 export default function SignInScreen() {
 
     const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const SignInUser = () => {
+        signInWithEmailAndPassword(FB_AUTH, email, password)
+            .then((userCredential) => {
+                navigation.navigate('FirstPage')
+            })
+            .catch((error) => {
+                console.error('Erreur lors de la connexion:', error);
+            });
+    };
 
   return (
     <View style={styles.container}>
@@ -21,7 +35,7 @@ export default function SignInScreen() {
                 <TextInput 
                     style={styles.input}
                     placeholder="Email"
-                    onChangeText={console.log('Email')}
+                    onChangeText={(text) => setEmail(text)}
                     autoCapitalize="none"
                     autoCorrect={false}
                     placeholderTextColor="rgba(255, 255, 255, 0.7)"
@@ -29,7 +43,7 @@ export default function SignInScreen() {
                 <TextInput 
                     style={styles.input}
                     placeholder="Mot de passe"
-                    onChangeText={console.log('Mot de passe')}
+                    onChangeText={(text) => setPassword(text)}
                     autoCapitalize="none"
                     autoCorrect={false}
                     secureTextEntry={true}
@@ -37,7 +51,7 @@ export default function SignInScreen() {
                 />
             </View>
             <TouchableOpacity
-                onPress={console.log('Inscription')}
+                onPress={SignInUser}
                 style={styles.button}
             >
                 <Text>Se connecter</Text>

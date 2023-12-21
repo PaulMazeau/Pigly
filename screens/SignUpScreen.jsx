@@ -1,10 +1,28 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
-import React from 'react'
+import React, { useState } from 'react';
+import { FB_AUTH } from '../firebaseconfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth'; 
 
 export default function SignUpScreen() {
 
     const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+  
+    const SignUpUser = (email, password, firstName, lastName) => {
+        createUserWithEmailAndPassword(FB_AUTH, email, password)
+          .then((userCredential) => {
+            console.log('Inscription réussie:', userCredential);
+          })
+          .catch((error) => {
+            console.error('Erreur lors inscription:', error);
+          });
+    };
+    
+      
 
   return (
     <View style={styles.container}> 
@@ -21,7 +39,7 @@ export default function SignUpScreen() {
             <TextInput 
                 style={styles.input}
                 placeholder="Prénom"
-                onChangeText={() => console.log('First time')}
+                onChangeText={(text) => setFirstName(text)}
                 autoCapitalize="none"
                 autoCorrect={false}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
@@ -29,7 +47,7 @@ export default function SignUpScreen() {
             <TextInput 
                 style={styles.input}
                 placeholder="Nom de famille"
-                onChangeText={() => console.log('Last Name')}
+                onChangeText={(text) => setLastName(text)}                
                 autoCapitalize="none"
                 autoCorrect={false}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
@@ -37,7 +55,7 @@ export default function SignUpScreen() {
             <TextInput 
                 style={styles.input}
                 placeholder="Email"
-                onChangeText={() => console.log('Email')}
+                onChangeText={(text) => setEmail(text)}                
                 autoCapitalize="none"
                 autoCorrect={false}
                 placeholderTextColor="rgba(255, 255, 255, 0.7)"
@@ -45,7 +63,7 @@ export default function SignUpScreen() {
             <TextInput 
                 style={styles.input}
                 placeholder="Mot de passe"
-                onChangeText={() => console.log('Mot de passe')}
+                onChangeText={(text) => setPassword(text)}
                 autoCapitalize="none"
                 autoCorrect={false}
                 secureTextEntry={true}
