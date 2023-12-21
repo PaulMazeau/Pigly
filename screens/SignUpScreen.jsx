@@ -14,12 +14,15 @@ export default function SignUpScreen() {
   
     const SignUpUser = (email, password, firstName, lastName) => {
         createUserWithEmailAndPassword(FB_AUTH, email, password)
-          .then((userCredential) => {
-            console.log('Inscription réussie:', userCredential);
-          })
-          .catch((error) => {
-            console.error('Erreur lors inscription:', error);
-          });
+        .then((userCredential) => {
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'Main' }],
+            });
+        })
+        .catch((error) => {
+            console.error('Erreur lors de inscription:', error);
+        });
     };
     
       
