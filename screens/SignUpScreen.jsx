@@ -1,7 +1,11 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 import React from 'react'
 
-export default function SignUpScreen({ navigation }) {
+export default function SignUpScreen() {
+
+    const navigation = useNavigation();
+
   return (
     <View style={styles.container}> 
         <SafeAreaView>

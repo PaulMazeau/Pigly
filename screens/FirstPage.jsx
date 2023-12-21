@@ -5,7 +5,6 @@ export default function FirstPage({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Bienvenue sur notre application!</Text>
-      
       <Button 
         title="Inscription"
         onPress={() => navigation.navigate('SignUp')}
