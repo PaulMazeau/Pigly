@@ -13,12 +13,16 @@ export default function SignInScreen() {
     const SignInUser = () => {
         signInWithEmailAndPassword(FB_AUTH, email, password)
             .then((userCredential) => {
-                navigation.navigate('FirstPage')
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Main' }],
+                });
             })
             .catch((error) => {
                 console.error('Erreur lors de la connexion:', error);
             });
     };
+    
 
   return (
     <View style={styles.container}>
