@@ -19,8 +19,7 @@ const firebaseConfig = {
 const FB_APP = initializeApp(firebaseConfig);
 
 // Configure Firebase Auth with AsyncStorage persistence
-const FB_AUTH = getAuth(FB_APP);
-initializeAuth(FB_APP, {
+const FB_AUTH = initializeAuth(FB_APP, {
   persistence: getReactNativePersistence(AsyncStorage)
 });
 

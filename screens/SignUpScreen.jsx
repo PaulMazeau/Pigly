@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+import { doc, setDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { FB_AUTH } from '../firebaseconfig';
+import { FB_AUTH, FB_DB } from '../firebaseconfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth'; 
 
 export default function SignUpScreen() {
@@ -15,13 +16,26 @@ export default function SignUpScreen() {
     const SignUpUser = (email, password, firstName, lastName) => {
         createUserWithEmailAndPassword(FB_AUTH, email, password)
         .then((userCredential) => {
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Main' }],
+            // Enregistrement des informations de l'utilisateur dans Firestore
+            const userDocRef = doc(FB_DB, 'users', userCredential.user.uid);
+            setDoc(userDocRef, {
+                FirstName: firstName,
+                LastName: lastName,
+                // Vous pouvez ajouter d'autres champs si nécessaire
+            })
+            .then(() => {
+                console.log('Informations de lutilisateur enregistrées dans Firestore');
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'Main' }],
+                });
+            })
+            .catch((error) => {
+                console.error('Erreur lors de lenregistrement des informations de lutilisateur:', error);
             });
         })
         .catch((error) => {
-            console.error('Erreur lors de inscription:', error);
+            console.error('Erreur lors de linscription:', error);
         });
     };
     
