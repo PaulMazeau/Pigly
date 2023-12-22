@@ -1,23 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { StyleSheet, Text, Animated, View, Button, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { main } from '../../constants/color';
+import RestaurantContext from '../../context/RestaurantContext';
 
 function RestaurantMoodCard() {
+  const { restaurantMood } = useContext(RestaurantContext);
   const navigation = useNavigation();
   const [isExpanded, setIsExpanded] = useState(false);
-  const position = useRef(new Animated.Value(0)).current; // 0: superposé, 1: déplié
+  const position = useRef(new Animated.Value(0)).current;
 
   const toggleCards = () => {
     Animated.spring(position, {
       toValue: isExpanded ? 0 : 1,
-      useNativeDriver: false, // À noter que spring ne supporte pas useNativeDriver: true
-      friction: 5, // contrôle "l'effet rebondissant"
-      tension: 20, // contrôle la vitesse
+      useNativeDriver: false,
+      friction: 5,
+      tension: 20,
     }).start();
-
+  
     setIsExpanded(!isExpanded);
-  };
+  };  
 
   const cardShadow = {
     shadowColor: '#000',
@@ -27,95 +29,71 @@ function RestaurantMoodCard() {
     },
     shadowOpacity: 0.4,
     shadowRadius: 4,
-    elevation: 2, // Pour Android
+    elevation: 2,
   };
+
+  const getDynamicCardStyle = (index, count) => {
+   const stackOffset = 10; 
+  const maxOffset = 60; 
+
+  return {
+    transform: [{
+      translateY: position.interpolate({
+        inputRange: [0, 1],
+        outputRange: [-maxOffset * index, stackOffset * index], 
+      }),
+    }],
+    zIndex: count - index,
+    ...cardShadow,
+  };
+};
+
+  const stackOffset = 10;
+  const maxOffset = 60;
+  const expandedHeight = 180 + (restaurantMood.length - 1) * stackOffset;
+  const collapsedHeight = expandedHeight + restaurantMood.length * maxOffset;
 
   const containerHeight = position.interpolate({
     inputRange: [0, 1],
-    outputRange: [180, 300]  // Remplacez par les valeurs réelles que vous voulez
+    outputRange: [expandedHeight, collapsedHeight],
   });
 
-  const card1Style = {
-    transform: [{
-      translateY: position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [0, 0], // Ne bouge pas
-      })
-    }],
-    backgroundColor: main.LogoBlack,
-    zIndex: 3,
-  };
-
-  const card2Style = {
-    transform: [{
-      translateY: position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-60, 0], // Bouge vers le haut
-      }),
-    }],
-    width: position.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['95%', '100%'], // Réduire la width quand ce n'est pas étendu
-    }),
-    backgroundColor: main.LogoBlack,
-    zIndex: 2,
-  };
-
-  const card3Style = {
-    transform: [{
-      translateY: position.interpolate({
-        inputRange: [0, 1],
-        outputRange: [-120, 0], // Bouge encore plus vers le haut
-      }),
-    }],
-    width: position.interpolate({
-      inputRange: [0, 1],
-      outputRange: ['90%', '100%'], // Réduire davantage la width quand ce n'est pas étendu
-    }),
-    backgroundColor: main.LogoBlack,
-    zIndex: 1,
-  };
-
   return (
-    <Animated.View style={{ ...styles.container, height: containerHeight }}>
+    <Animated.View style={[styles.container, { height: containerHeight }]}>
       <View style={styles.TitleContainer}>
         <Text style={styles.Title}>Restaurant</Text>
         <Button title={isExpanded ? "Voir moins" : "Voir plus"} onPress={toggleCards} />
       </View>
       <View style={styles.cardContainer}>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}>
-          <Animated.View style={[styles.card, card1Style, cardShadow]}>
-            <Text style={styles.CardTitle}>Romantique</Text>
-            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card2Style, cardShadow]}>
-            <Text style={styles.CardTitle}>Romantique</Text>
-            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
-          </Animated.View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('HomeScreen')}><Animated.View style={[styles.card, card3Style, cardShadow]}>
-            <Text style={styles.CardTitle}>Romantique</Text>
-            <Text style={styles.CardSubTitle}>Une sélection de restaurant romantique</Text>
-          </Animated.View>
-        </TouchableWithoutFeedback>
+        {restaurantMood.map((moodItem, index) => (
+          <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('HomeScreen')}>
+            <Animated.View style={[
+              styles.card,
+              getDynamicCardStyle(index, restaurantMood.length)
+            ]}>
+              <Text style={styles.CardTitle}>{moodItem}</Text>
+              <Text style={styles.CardSubTitle}>Une sélection de restaurant {moodItem}</Text>
+            </Animated.View>
+          </TouchableWithoutFeedback>
+        ))}
       </View>
     </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
-
   TitleContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
     marginHorizontal: 'auto',
     alignItems: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   cardContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 10,
   },
   card: {
     width: '100%',
@@ -123,22 +101,22 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     marginBottom: 12,
-    backgroundColor: main.LogoBlack
+    backgroundColor: main.LogoBlack,
   },
   CardTitle: {
-    fontSize: 24, 
+    fontSize: 24,
     fontWeight: '700',
-    color: main.LogoPink
+    color: main.LogoPink,
   },
   CardSubTitle: {
-    fontSize: 16, 
+    fontSize: 16,
     fontWeight: '500',
-    color: '#939393'
+    color: '#939393',
   },
   Title: {
     fontSize: 20,
-    fontWeight: '700'
-  }
+    fontWeight: '700',
+  },
 });
 
 export default RestaurantMoodCard;
