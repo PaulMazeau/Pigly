@@ -6,13 +6,16 @@ import Header from '../components/Reusable/Header'
 import { signOut } from 'firebase/auth';
 import { FB_AUTH } from '../firebaseconfig'; 
 import { useNavigation } from '@react-navigation/native';
-import { useAuth } from '../context/AuthContext';
-
+import { useUser } from '../context/UserContext'; 
 
 export default function MoodPickerScreen() {
 
   const navigation = useNavigation();
-  const { profile } = useAuth();
+  const { profile, location } = useUser();
+
+  const formattedLocation = location
+  ? `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`
+  : 'Localisation non disponible';
 
   const handleSignOut = () => {
     signOut(FB_AUTH)
@@ -41,6 +44,7 @@ export default function MoodPickerScreen() {
 
       <View style={{ alignItems: 'center', justifyContent: 'center' }}>
         <Text>Bonjour {profile.FirstName} {profile.LastName}!</Text>
+        <Text style={styles.location}>{formattedLocation}</Text>
       </View>
     
       <Button
@@ -60,5 +64,8 @@ const styles = StyleSheet.create({
     marginTop: 32,
     marginBottom: 40,
   },
- 
+  location: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
 });
