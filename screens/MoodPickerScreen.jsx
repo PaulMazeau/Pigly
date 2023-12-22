@@ -17,6 +17,8 @@ export default function MoodPickerScreen() {
   ? `Latitude: ${location.coords.latitude}, Longitude: ${location.coords.longitude}`
   : 'Localisation non disponible';
 
+  console.log({formattedLocation})
+
   const handleSignOut = () => {
     signOut(FB_AUTH)
     .then(() => {
@@ -38,14 +40,10 @@ export default function MoodPickerScreen() {
   return (
     <View style={styles.container}>
       <Header/>
+      <Text>Bonjour {profile.FirstName} {profile.LastName}!</Text>
       <Text style={styles.description}>Donne nous ton mood on te propose une liste d’établissement autour de toi. </Text>
       <RestaurantMoodCard/>
       <BarMoodCard/>
-
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Bonjour {profile.FirstName} {profile.LastName}!</Text>
-        <Text style={styles.location}>{formattedLocation}</Text>
-      </View>
     
       <Button
         title="Déconnexion"
