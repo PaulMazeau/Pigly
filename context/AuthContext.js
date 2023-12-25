@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from 'firebase/auth';
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { FB_AUTH, FB_DB } from '../firebaseconfig';
 import { setDoc } from 'firebase/firestore';
@@ -10,21 +10,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
-  const [profile, setProfile] = useState({});
 
   // Inscription d'un nouvel utilisateur
-  const signUp = async (email, password, firstName, lastName) => {
-    const userCredential = await createUserWithEmailAndPassword(FB_AUTH, email, password);
-    const user = userCredential.user;
-  
-    // Enregistrement des informations de l'utilisateur dans Firestore
-    await setDoc(doc(FB_DB, 'users', user.uid), {
-      FirstName: firstName,
-      LastName: lastName,
-      // Vous pouvez ajouter d'autres champs si nécessaire
-    });
-  
-    return user;
+  const signUp = (email, password) => {
+    return createUserWithEmailAndPassword(FB_AUTH, email, password);
   };
 
   // Connexion d'un utilisateur
@@ -43,19 +32,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(FB_AUTH, async (user) => {
+    const unsubscribe = onAuthStateChanged(FB_AUTH, (user) => {
       setCurrentUser(user);
-      if (user) {
-        const userProfileRef = doc(FB_DB, 'users', user.uid);
-        const userProfileSnap = await getDoc(userProfileRef);
-        if (userProfileSnap.exists()) {
-          setProfile(userProfileSnap.data());
-        } else {
-          setProfile({});
-        }
-      } else {
-        setProfile({});
-      }
     });
 
     return () => unsubscribe();
@@ -63,7 +41,6 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     currentUser,
-    profile,
     signUp,
     signIn,
     logOut,
