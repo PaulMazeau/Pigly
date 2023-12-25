@@ -214,10 +214,10 @@ const styles = StyleSheet.create({
         width: '30%',
         height: 1,
         backgroundColor: 'white',
-        marginTop: 20,
+        marginTop: 25,
     },
     txtseparator: {
-        paddingTop: 10, // j'ai ajouter cela 
+        marginTop: 15,
         width: '20%',
         color: 'white',
         justifyContent: 'center',

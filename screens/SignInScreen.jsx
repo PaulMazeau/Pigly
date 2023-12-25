@@ -89,7 +89,12 @@ export default function SignInScreen() {
             >
                 <Text>Se connecter</Text>
             </TouchableOpacity>
-
+            <TouchableOpacity
+                onPress={() => navigation.navigate('ForgotPassword')}
+                style={styles.button2}
+            >
+                <Text style={styles.txtBtn2}>Mot de passe oublier ?</Text>
+            </TouchableOpacity>
             <View style={styles.rowseparator}>
                 <View style={styles.separator} />
                 <Text style={styles.txtseparator}>Ou</Text>
@@ -167,10 +172,10 @@ const styles = StyleSheet.create({
         width: '30%',
         height: 1,
         backgroundColor: 'white',
-        marginTop: 20,
+        marginTop: 30,
     },
     txtseparator: {
-        padding: 10, // j'ai rajouté car ca n'était pas aligné verticalement
+        paddingTop: 20, // j'ai rajouté car ca n'était pas aligné verticalement
         width: '20%',
         color: 'white',
         justifyContent: 'center',

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useContext } from 'react';
-import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail} from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { FB_AUTH, FB_DB } from '../firebaseconfig';
 import { setDoc } from 'firebase/firestore';
@@ -32,6 +32,11 @@ export const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(FB_AUTH, email, password);
   };
 
+  // Rester d'un password oublié par email de l'utilisateur
+  const resetPassword = (email) => {
+    return sendPasswordResetEmail(FB_AUTH, email);
+  }
+
   // Déconnexion de l'utilisateur
   const logOut = () => {
     return signOut(FB_AUTH);
@@ -62,6 +67,7 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     logOut,
+    resetPassword,
   };
 
   return (
