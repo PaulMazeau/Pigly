@@ -17,6 +17,7 @@ export const UserProvider = ({ children }) => {
     const fetchProfile = async () => {
       if (currentUser) {
         const userProfileRef = doc(FB_DB, 'users', currentUser.uid);
+        console.log("currentUser.uid :",currentUser.uid);
         const userProfileSnap = await getDoc(userProfileRef);
         if (userProfileSnap.exists()) {
           setProfile(userProfileSnap.data());
@@ -26,6 +27,7 @@ export const UserProvider = ({ children }) => {
 
     fetchProfile();
   }, [currentUser]);
+  console.log("Profile :",profile);
 
   useEffect(() => {
     (async () => {
