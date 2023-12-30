@@ -3,8 +3,6 @@ import { StyleSheet, Text, Animated, Button, View } from 'react-native';
 import BarMoodCard from '../components/MoodPicker/BarMoodCard';
 import RestaurantMoodCard from '../components/MoodPicker/RestaurantMoodCard';
 import Header from '../components/Reusable/Header'
-import { signOut } from 'firebase/auth';
-import { FB_AUTH } from '../firebaseconfig'; 
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext'; 
 
@@ -19,19 +17,6 @@ export default function MoodPickerScreen() {
 
   console.log({formattedLocation})
 
-  const handleSignOut = () => {
-    signOut(FB_AUTH)
-    .then(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Auth' }],
-      });
-    })
-    .catch((error) => {
-      console.error('Erreur lors de la déconnexion:', error);
-    });
-  };
-
   //Etat de chargement o cas ou ca met du temps a charger
   if (!profile) {
     return <Text>Chargement...</Text>;
@@ -45,9 +30,9 @@ export default function MoodPickerScreen() {
       <RestaurantMoodCard/>
       <BarMoodCard/>
     
-      <Button
-        title="Déconnexion"
-        onPress={handleSignOut}
+       <Button
+        title="Profile"
+        onPress={() => navigation.navigate('ProfileScreen')}
       />
     </View>
   );

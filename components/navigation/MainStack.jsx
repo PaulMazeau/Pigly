@@ -4,6 +4,7 @@ import HomeScreen from '../../screens/HomeScreen';
 import MoodPickerScreen from '../../screens/MoodPickerScreen';
 import RestaurantScreen from '../../screens/RestaurantScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
+import ProfileScreen from '../../screens/ProfileScreen';
 
 export default function MainStackComponent() {
     const MainNavigation = createNativeStackNavigator();
@@ -14,6 +15,7 @@ export default function MainStackComponent() {
             <MainNavigation.Screen name="HomeScreen" component={HomeScreen} />
             <MainNavigation.Screen name="RestaurantScreen" component={RestaurantScreen} />
             <MainNavigation.Screen name="SettingsScreen" component={SettingsScreen} />
+            <MainNavigation.Screen name="ProfileScreen" component={ProfileScreen} />
         </MainNavigation.Navigator>
     )
 }
