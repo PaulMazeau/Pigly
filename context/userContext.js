@@ -20,7 +20,10 @@ export const UserProvider = ({ children }) => {
         console.log("currentUser.uid :",currentUser.uid);
         const userProfileSnap = await getDoc(userProfileRef);
         if (userProfileSnap.exists()) {
-          setProfile(userProfileSnap.data());
+          setProfile({
+            ...userProfileSnap.data(),
+            uid: currentUser.uid
+          });
         }
       }
     };
