@@ -4,7 +4,7 @@ import BarMoodCard from '../components/MoodPicker/BarMoodCard';
 import RestaurantMoodCard from '../components/MoodPicker/RestaurantMoodCard';
 import Header from '../components/Reusable/Header'
 import { useNavigation } from '@react-navigation/native';
-import { useUser } from '../context/userContext'; 
+import { useUser } from '../context/UserContext'; 
 
 export default function MoodPickerScreen() {
 

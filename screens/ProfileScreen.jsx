@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Reusable/Header'
 import { signOut } from 'firebase/auth';
 import { FB_AUTH, FB_DB } from '../firebaseconfig';
-import { useUser } from '../context/userContext';
+import { useUser } from '../context/UserContext';
 import RestaurantContext from '../context/RestaurantContext';
 import RestaurantCard from '../components/Home/RestaurantCard';
 

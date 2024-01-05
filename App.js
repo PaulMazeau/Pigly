@@ -7,11 +7,7 @@ import MainStackComponent from './components/navigation/MainStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { RestaurantProvider } from './context/RestaurantContext';
-<<<<<<< HEAD
-import { UserProvider } from './context/userContext';
-=======
 import { UserProvider } from './context/UserContext';
->>>>>>> 051f27d (La j'espere c bon)
 import { MenuProvider } from './context/MenuContext';
 
 const Stack = createNativeStackNavigator();

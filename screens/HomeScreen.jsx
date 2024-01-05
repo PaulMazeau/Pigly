@@ -14,17 +14,6 @@ export default function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <Header/>
       <RestaurantCarroussel/>
-      <Text style={styles.subTitle}>Carrousel de tous nos restaurants</Text>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.containerCarrousel}
-        keyboardShouldPersistTaps="handled"
-      >
-        {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-        ))}
-      </ScrollView>
       <View style={styles.subTitleBlock}>
         <Text style={styles.subTitle}>Les 10 meilleurs</Text>
         <RestaurantTag text='Lyon'/>
