@@ -5,9 +5,7 @@ import { FB_DB } from '../firebaseconfig';
 import { useAuth } from './AuthContext';
 
 const UserContext = createContext();
-
 export const useUser = () => useContext(UserContext);
-
 export const UserProvider = ({ children }) => {
   const { currentUser } = useAuth();
   const [profile, setProfile] = useState({});
@@ -18,7 +16,7 @@ export const UserProvider = ({ children }) => {
 
     if (currentUser) {
       const userProfileRef = doc(FB_DB, 'users', currentUser.uid);
-      
+
       // S'abonner aux mises à jour du document utilisateur
       unsubscribeFromUser = onSnapshot(userProfileRef, (doc) => {
         if (doc.exists()) {
@@ -44,20 +42,17 @@ export const UserProvider = ({ children }) => {
         console.error('Permission to access location was denied');
         return;
       }
-
       let userLocation = await Location.getCurrentPositionAsync({});
       setLocation(userLocation);
     })();
   }, []);
-
   const value = {
     profile,
     location,
   };
-
   return (
     <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
   );
-};
+  };
