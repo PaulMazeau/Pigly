@@ -21,7 +21,6 @@ export default function RestaurantCard({ restaurant }) {
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     container: {
         width: 128,
