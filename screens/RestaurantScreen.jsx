@@ -9,7 +9,7 @@ import RestaurantReview from '../components/Restaurant/RestaurantReview';
 import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
 import RestaurantContext from '../context/RestaurantContext';
 import { FB_DB } from '../firebaseconfig';
-import { useUser } from '../context/userContext';
+import { useUser } from '../context/UserContext';
 import { updateDoc, arrayUnion, arrayRemove, doc } from 'firebase/firestore';
 import { useMenu } from '../context/MenuContext';
 
