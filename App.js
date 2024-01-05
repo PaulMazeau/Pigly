@@ -7,7 +7,8 @@ import MainStackComponent from './components/navigation/MainStack';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { RestaurantProvider } from './context/RestaurantContext';
-import { UserProvider } from './context/UserContext';
+import { UserProvider } from './context/userContext';
+import { MenuProvider } from './context/MenuContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,11 +41,13 @@ export default function App() {
     <AuthProvider>
       <UserProvider>
         <RestaurantProvider>
+      <MenuProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
               <AppNavigator />
             </NavigationContainer>
           </GestureHandlerRootView>
+        </MenuProvider>
         </RestaurantProvider>
       </UserProvider>
     </AuthProvider>
