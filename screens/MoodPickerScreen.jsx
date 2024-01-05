@@ -29,11 +29,6 @@ export default function MoodPickerScreen() {
       <Text style={styles.description}>Donne nous ton mood on te propose une liste d’établissement autour de toi. </Text>
       <RestaurantMoodCard/>
       <BarMoodCard/>
-    
-       <Button
-        title="Profile"
-        onPress={() => navigation.navigate('ProfileScreen')}
-      />
     </View>
   );
 }
