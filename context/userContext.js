@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import * as Location from 'expo-location';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 import { FB_DB } from '../firebaseconfig';
 import { useAuth } from './AuthContext';
 
@@ -14,23 +14,28 @@ export const UserProvider = ({ children }) => {
   const [location, setLocation] = useState(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      if (currentUser) {
-        const userProfileRef = doc(FB_DB, 'users', currentUser.uid);
-        console.log("currentUser.uid :",currentUser.uid);
-        const userProfileSnap = await getDoc(userProfileRef);
-        if (userProfileSnap.exists()) {
+    let unsubscribeFromUser = () => {};
+
+    if (currentUser) {
+      const userProfileRef = doc(FB_DB, 'users', currentUser.uid);
+      
+      // S'abonner aux mises à jour du document utilisateur
+      unsubscribeFromUser = onSnapshot(userProfileRef, (doc) => {
+        if (doc.exists()) {
           setProfile({
-            ...userProfileSnap.data(),
+            ...doc.data(),
             uid: currentUser.uid
           });
+        } else {
+          console.log("No such user!");
         }
-      }
-    };
+      });
+    }
 
-    fetchProfile();
+    return () => {
+      unsubscribeFromUser(); // Nettoyer l'abonnement lors du démontage du composant
+    };
   }, [currentUser]);
-  console.log("Profile :",profile);
 
   useEffect(() => {
     (async () => {

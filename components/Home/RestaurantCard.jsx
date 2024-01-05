@@ -1,13 +1,23 @@
 import React from 'react'
-import { StyleSheet, Text, View, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, ImageBackground, TouchableOpacity } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
 
-export default function Top10RestaurantCard({ restaurant }) {
+export default function RestaurantCard({ restaurant }) {
+
+   const navigation = useNavigation();
+
+    const redirection = () => {
+        navigation.navigate('RestaurantScreen', { restaurantId: restaurant.id }); // Naviguer avec l'ID du restaurant
+    }
+
     console.log("Data du restaurant pour RestaurantCard :",{ restaurant });
     return (
         <View style={styles.container}>
-            <ImageBackground source={require('../../assets/images/La_Felicita.jpg')} resizeMode="cover" style={styles.image}>
+            <TouchableOpacity onPress={redirection}>
+            <ImageBackground source={{ uri: restaurant?.photo[0]}} resizeMode="cover" style={styles.image}>
                 <Text style={styles.RestaurantTitle}>{restaurant.nom}</Text>
             </ImageBackground>
+            </TouchableOpacity>
         </View>
     )
 }
