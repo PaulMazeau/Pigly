@@ -6,7 +6,7 @@ import RestaurantTag from '../components/Restaurant/RestaurantTag';
 import Top10Slider from '../components/Home/Top10Slider';
 
 
-export default function HomeScreen({ navigation }) {
+export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Header/>
