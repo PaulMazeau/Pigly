@@ -2,7 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../../screens/HomeScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
-import MoodPickerScreen from '../../screens/MoodPickerScreen';
+import Map from '../../screens/Map';
 
 import Home from '../../assets/icons/Home.svg';
 import Profile from '../../assets/icons/Profile.svg';
@@ -32,8 +32,8 @@ export default function TabBarStackComponent() {
                 }} 
             />
             <Tab.Screen 
-                name="MoodPickerScreen" 
-                component={MoodPickerScreen}
+                name="Map" 
+                component={Map}
                 options={{
                     tabBarIcon: () => <Search stroke={main.LogoPink} width={24} height={24} />,
                 }} 
