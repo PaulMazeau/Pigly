@@ -18,20 +18,13 @@ export default function ProfileScreen() {
     const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
 
     useEffect(() => {
-        if (profile?.uid) {
-            // abonner au document de l'utilisateur pour écouter les changements de favoris
-            const unsubscribe = onSnapshot(doc(FB_DB, "users", profile.uid), (doc) => {
-                const userFavoris = doc.data()?.Favoris || [];
-                const updatedFavorites = restaurants.filter(restaurant =>
-                    userFavoris.includes(restaurant.id)
-                );
-                setFavoriteRestaurants(updatedFavorites);
-                console.log("Mise à jour des favoris en temps réel", updatedFavorites);
-            });
-
-            return () => unsubscribe();
-        }
-    }, [profile.uid, restaurants]);
+        // Filtrer pour obtenir uniquement les restaurants favoris
+        const updatedFavorites = restaurants.filter(restaurant =>
+            profile.Favoris?.includes(restaurant.id)
+        );
+        setFavoriteRestaurants(updatedFavorites);
+        console.log("Favoris mis à jour depuis le contexte", updatedFavorites);
+    }, [profile.Favoris, restaurants]); 
 
 
     const handleSignOut = () => {
