@@ -4,6 +4,7 @@ import { FB_AUTH } from '../firebaseconfig';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext';
+import { main } from '../constants/color';
 
 export default function SignInScreen() {
 
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#121212'
+        backgroundColor: main.LogoBlack
     },
     text: {
         fontWeight: 'bold',
