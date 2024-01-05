@@ -2,6 +2,8 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../../screens/HomeScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
+import RestaurantScreen from '../../screens/RestaurantScreen';
+import SettingsScreen from '../../screens/SettingsScreen';
 import Map from '../../screens/Map';
 
 import Home from '../../assets/icons/Home.svg';
@@ -11,10 +13,11 @@ import { main } from '../../constants/color';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabBarStackComponent() {
+export default function TabBarStackComponent({ route }) {
+    const initialRouteName = route.params?.screen || "MoodPickerScreen"; // Utilisez le paramètre 'screen' si disponible
     return (
         <Tab.Navigator 
-            initialRouteName="ProfileScreen"
+            initialRouteName={initialRouteName}
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -44,6 +47,16 @@ export default function TabBarStackComponent() {
                 options={{
                     tabBarIcon: () => <Profile stroke={main.LogoPink} width={24} height={24} />,
                 }} 
+            />
+            <Tab.Screen 
+                name="RestaurantScreen" 
+                component={RestaurantScreen}
+                options={{ tabBarButton: () => null }}
+            />
+            <Tab.Screen 
+                name="SettingsScreen" 
+                component={SettingsScreen}
+                options={{ tabBarButton: () => null }}
             />
         </Tab.Navigator>
     );

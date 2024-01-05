@@ -66,7 +66,7 @@ function RestaurantMoodCard() {
       </View>
       <View style={styles.cardContainer}>
         {restaurantMood.map((moodItem, index) => (
-          <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('HomeScreen')}>
+          <TouchableWithoutFeedback key={index} onPress={() => navigation.navigate('HomeTab', { screen: 'HomeScreen' })}>
             <Animated.View style={[
               styles.card,
               getDynamicCardStyle(index, restaurantMood.length)
