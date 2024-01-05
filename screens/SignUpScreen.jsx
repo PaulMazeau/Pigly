@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { FB_AUTH, FB_DB } from '../firebaseconfig';
 import { doc, setDoc } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { main } from '../constants/color';
 
 export default function SignUpScreen() {
 
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#121212'
+        backgroundColor: main.LogoBlack
     },
     text: {
         fontWeight: 'bold',
