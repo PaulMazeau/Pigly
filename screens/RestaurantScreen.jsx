@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, StyleSheet, Image, ScrollView, Button } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
 import RestaurantTag from '../components/Restaurant/RestaurantTag';
 import RestaurantMap from '../components/Restaurant/RestaurantMap';
@@ -10,24 +11,49 @@ import RestaurantContext from '../context/RestaurantContext';
 import { FB_DB } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
 import { updateDoc, arrayUnion, arrayRemove, doc } from 'firebase/firestore';
+import { useMenu } from '../context/MenuContext';
 
 const RestaurantScreen = () => {
 
   const { restaurants } = useContext(RestaurantContext);
   const { profile } = useUser();
-  const restaurant = restaurants[0];
+  
+  // Récupérer les catégories du menu
+  const { categories, fetchCategories } = useMenu();
+
+  // Utiliser useRoute pour accéder aux paramètres de la route
+  const route = useRoute(); 
+  
+  // Récupérer l'ID du restaurant passé en paramètre
+  const restaurantId = route.params?.restaurantId; 
+
+  
+  // Trouver le restaurant correspondant par ID
+  const restaurant = restaurants.find(restaurant => restaurant.id === restaurantId);
+  
+  console.log("Data du resto...");
+  
+  // Affiché les menus pour RestaurantMenu.jsx
+  useEffect(() => {
+    if (restaurantId) {
+      fetchCategories(restaurantId);
+    }
+  }, [restaurantId]);
 
   const [isFavorite, setIsFavorite] = useState(false);
 
   // Vérifier si le restaurant actuel est dans les favoris
   useEffect(() => {
+    console.log('Vérification des favoris pour le restaurant', restaurant.id );
     if (profile?.Favoris?.includes(restaurant.id)) {
       setIsFavorite(true);
+      console.log('Restaurant dans les favoris', restaurant.id, profile.Favoris);
     } else {
       setIsFavorite(false);
+      console.log('Restaurant pas dans les favoris', restaurant.id, profile.Favoris);
     }
-  }, [profile, restaurant.id]);
-
+  }, [profile, restaurantId]);
+  
   // Fonction pour ajouter aux favoris
   const addToFavorites = async () => {
     if (profile && profile.uid && restaurant.id) {
@@ -71,12 +97,16 @@ const RestaurantScreen = () => {
       <Image source={{ uri: restaurant?.photo[0] }} style={styles.image} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <Text style={styles.title}>{restaurant?.nom}</Text>
+
         <View style={styles.tagContainer}>
-          <RestaurantTag text="Bruyant" />
-          <RestaurantTag text="Food market" />
-          <RestaurantTag text="Italien" />
-          <RestaurantTag text="Italien" />
-          <RestaurantTag text="€€€€" />
+          {restaurant.tag.map((tag, index) => {
+            return (
+              // Afficher dynamiquement les tags
+              <View key={index}>
+                <RestaurantTag text={tag} />
+              </View>
+            );
+          })}
         </View>
         {isFavorite ? (
           <Button title="Retirer des favoris" onPress={removeFromFavorites} />
@@ -92,9 +122,8 @@ const RestaurantScreen = () => {
             <RestaurantMap />
           </View>
         </View>
-
-        <RestaurantMenu />
-      </ScrollView>
+        <RestaurantMenu categories={categories} restaurantId={restaurantId} />
+        </ScrollView>
     </View>
   );
 };
