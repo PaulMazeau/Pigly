@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native'
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { FB_AUTH } from '../firebaseconfig';
 import { useNavigation } from '@react-navigation/native';
@@ -7,48 +7,68 @@ import { useAuth } from '../context/AuthContext';
 import { main } from '../constants/color';
 
 export default function SignInScreen() {
-
     const navigation = useNavigation();
     const { signIn } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    // Gestion d'affichage des Erreurs
     const [errorEmail, setErrorEmail] = useState('');
     const [errorPassword, setErrorPassword] = useState('');
 
     const SignInUser = () => {
-        // Reset des erreurs
         setErrorEmail('');
         setErrorPassword('');
-        
-        let isValid = true; // Pour suivre la validité des champs
 
-        //Verif de l'email
+        let isValid = true;
+
         if (!email.trim()) {
             setErrorEmail("L'email est requis");
             isValid = false;
         }
-        // Verif du mot de passe
         if (!password.trim()) {
             setErrorPassword("Le mot de passe est requis");
             isValid = false;
         }
-        // Si tout est valide => on peut déclenché la connection
+
         if (isValid) {
-        signIn(email, password)
-            .then(() => {
-                navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Main' }],
+            signIn(email, password)
+                .then(() => {
+                    callHelloWorldFunction();
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Main' }],
+                    });
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/invalid-credential') {
+                        setErrorPassword("L'email ou le mot de passe est incorrect");
+                    }
+                    console.error('Erreur lors de la connexion:', error);
                 });
-            })
-            .catch((error) => {
-                if (error.code === 'auth/invalid-credential') {
-                    console.log('That email address is already in use!');
-                    setErrorPassword("L'email ou le mot de passe est incorrect");
+        }
+    };
+
+    const callHelloWorldFunction = async () => {
+        try {
+            const user = FB_AUTH.currentUser;
+            if (user) {
+                const idToken = await user.getIdToken();
+                console.log(idToken)
+                const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
+                    method: 'GET',
+                    headers: {
+                        Authorization: `Bearer ${idToken}`
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Problème de réponse du serveur');
                 }
-                console.error('Erreur lors de la connexion:', error);
-            });
+
+                const data = await response.text();
+                Alert.alert('Réponse de la fonction:', data);
+            }
+        } catch (error) {
+            Alert.alert('Erreur', error.toString());
         }
     };
 
