@@ -1,10 +1,18 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import RestaurantContext from '../context/RestaurantContext';
+import RestaurantCard from '../components/Home/RestaurantCard';
 
 export default function Map({ navigation }) {
+  const { restaurants } = useContext(RestaurantContext);
+  console.log("Data des restaurants pour Map :",{ restaurants });
   return (
     <View style={styles.container}>
-      <Text>Ici il y aura une map</Text>
+      <Text style={styles.subTitle}>Tous nos restaurants</Text>
+        {restaurants.map(restaurant => (
+          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
+        ))}
+
     </View>
   );
 }
@@ -15,6 +23,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
+  },
+  containerCarrousel:{
+    flexDirection: 'row',
+    paddingBottom: 500
   },
   title: {
     fontSize: 24,
