@@ -1,11 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Dimensions } from 'react-native';
-import Animated, {
-  Extrapolate,
-  interpolate,
-  useAnimatedStyle,
-  useSharedValue
-} from 'react-native-reanimated';
+import { collection, getDocs } from "firebase/firestore";
+import { FB_DB } from '../../firebaseconfig';
+import Animated, {Extrapolate, interpolate, useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 import ImageCarroussel from './ImageCarroussel';
 import { main } from '../../constants/color';
@@ -21,7 +18,26 @@ const colors = [
 ];
 
 function RestaurantCarroussel() {
+  const [restaurants, setRestaurants] = useState([]);
   const progressValue = useSharedValue(0);
+
+  useEffect(() => {
+    const fetchRestaurants = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(FB_DB, 'restaurants'));
+        const fetchedRestaurants = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setRestaurants(fetchedRestaurants);
+      } catch (error) {
+        console.error("Erreur de récupération des restaurants:", error);
+      }
+    };
+
+    fetchRestaurants();
+  }, []);
+
 
   return (
     <View style={{ alignItems: "center" }}>
@@ -36,10 +52,8 @@ function RestaurantCarroussel() {
           parallaxScrollingScale: 0.9,
           parallaxScrollingOffset: 50,
         }}
-        data={colors}
-        renderItem={({ index }) => (
-          <ImageCarroussel/>
-        )}
+        data={restaurants}
+        renderItem={({ item }) => <ImageCarroussel restaurant={item} />}
       />
 
       <View

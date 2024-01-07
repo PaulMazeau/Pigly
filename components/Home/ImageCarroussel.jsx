@@ -3,21 +3,18 @@ import { View, Text, Image, StyleSheet, ImageBackground, TouchableWithoutFeedbac
 import ArrowUp from '../../assets/icons/ArrowUp.svg'
 import { useNavigation } from '@react-navigation/native';
 
-function ImageCarroussel() {
+function ImageCarroussel({restaurant}) {
 
     const navigation = useNavigation();
 
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen')}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen', { restaurantId: restaurant.id })}>
             <View style={styles.container}>
-           <ImageBackground source={require('../../assets/images/La_Felicita.jpg')} resizeMode="cover" style={styles.image}>
+            <ImageBackground source={{ uri: restaurant.photo[0] }} style={styles.image}>
             <View style={styles.bottom}>
                 <View>
-                    <Text style={styles.title}>La felicita</Text>
-                    <Text style={styles.description}>
-                        La Felicita, c'est un immense food-market en direct producteurs où tout est 100% fait maison.
-                        4.500 m2, 8 cuisines...
-                    </Text>
+                    <Text style={styles.title}>{restaurant.nom}</Text>
+                    <Text style={styles.description}>{restaurant.description}</Text>
                 </View>
             <ArrowUp width={48} height={48} color={'white'}/>
             </View>

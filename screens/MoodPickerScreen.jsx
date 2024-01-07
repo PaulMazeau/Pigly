@@ -3,11 +3,10 @@ import { StyleSheet, Text, Button, View, Alert } from 'react-native';
 import Header from '../components/Reusable/Header';
 import RestaurantMoodCard from '../components/MoodPicker/RestaurantMoodCard';
 import BarMoodCard from '../components/MoodPicker/BarMoodCard';
-import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../context/UserContext';
+import { FB_AUTH } from '../firebaseconfig';
 
 export default function MoodPickerScreen() {
-  const navigation = useNavigation();
   const { profile, location } = useUser();
 
   const formattedLocation = location
@@ -19,25 +18,30 @@ export default function MoodPickerScreen() {
   const [isLoading, setIsLoading] = useState(false);
 
   const callHelloWorldFunction = async () => {
-    setIsLoading(true);
     try {
-      // Remplacez l'URL par celle de votre fonction Cloud
-      const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
-        method: 'GET', // ou 'POST' si votre fonction attend une requête POST
-      });
-
-      if (!response.ok) {
-        throw new Error('Problème de réponse du serveur');
+      const user = FB_AUTH.currentUser;
+      if (user) {
+        const idToken = await user.getIdToken();
+  
+        const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${idToken}`
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error('Problème de réponse du serveur');
+        }
+  
+        const data = await response.text();
+        Alert.alert('Réponse de la fonction:', data);
       }
-
-      const data = await response.text();
-      Alert.alert('Réponse de la fonction:', data);
     } catch (error) {
       Alert.alert('Erreur', error.toString());
-    } finally {
-      setIsLoading(false);
     }
   };
+  
 
   if (!profile) {
     return <Text>Chargement...</Text>;
@@ -46,12 +50,14 @@ export default function MoodPickerScreen() {
   return (
     <View style={styles.container}>
       <Header />
-      <Text>Bonjour {profile.FirstName} {profile.LastName}!</Text>
+      <View style={styles.TextContainer}>
+      <Text style={styles.title}>Salut {profile.FirstName} {profile.LastName},</Text>
       <Text style={styles.description}>Donne nous ton mood on te propose une liste d’établissement autour de toi.</Text>
+      </View>
       <RestaurantMoodCard />
       <BarMoodCard />
       <Button
-        title="Dire Bonjour"
+        title="Test Clound function"
         onPress={callHelloWorldFunction}
         disabled={isLoading}
       />
@@ -65,12 +71,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 14
   },
-  description: {
-    marginTop: 32,
-    marginBottom: 40,
+  TextContainer: {
+    marginVertical: 12,
   },
-  location: {
-    fontSize: 16,
-    marginBottom: 20,
+  title: {
+    fontSize: 20,
+    fontWeight: '700'
+  },
+  description: {
+    marginTop: 20,
+    fontSize: 16
   },
 });
