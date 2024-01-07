@@ -2,20 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { View, Dimensions } from 'react-native';
 import { collection, getDocs } from "firebase/firestore";
 import { FB_DB } from '../../firebaseconfig';
-import Animated, {Extrapolate, interpolate, useAnimatedStyle, useSharedValue} from 'react-native-reanimated';
+import Animated, { Extrapolate, interpolate, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import Carousel from 'react-native-reanimated-carousel';
 import ImageCarroussel from './ImageCarroussel';
 import { main } from '../../constants/color';
 
 const PAGE_WIDTH = Dimensions.get('window').width;
-const colors = [
-  "#26292E",
-  "#899F9C",
-  "#B3C680",
-  "#5C6265",
-  "#F5D399",
-  "#F1F1F1",
-];
 
 function RestaurantCarroussel() {
   const [restaurants, setRestaurants] = useState([]);
@@ -38,7 +30,6 @@ function RestaurantCarroussel() {
     fetchRestaurants();
   }, []);
 
-
   return (
     <View style={{ alignItems: "center" }}>
       <Carousel
@@ -59,18 +50,16 @@ function RestaurantCarroussel() {
       <View
         style={{
           flexDirection: "row",
-          justifyContent: "space-between",
-          width: 100,
-          alignSelf: "center",
-          position: "relative",
+          justifyContent: "center",
+          marginTop: 10, // Adjust as needed
         }}
       >
-        {colors.map((_, index) => (
+        {restaurants.map((_, index) => (
           <PaginationItem
             key={index}
             animValue={progressValue}
             index={index}
-            length={colors.length}
+            length={restaurants.length}
           />
         ))}
       </View>
@@ -113,6 +102,7 @@ function PaginationItem(props) {
         height: width,
         borderRadius: 50,
         overflow: 'hidden',
+        marginHorizontal: 2
       }}
     >
       <Animated.View
