@@ -10,11 +10,7 @@ export default function Map({ navigation }) {
   return (
     <View style={styles.container}>
       <Header/>
-      <Text style={styles.subTitle}>Tous nos restaurants</Text>
-        {restaurants.map(restaurant => (
-          <RestaurantCard key={restaurant.id} restaurant={restaurant} />
-        ))}
-
+      <Text>ICI YAURA LA MAP</Text>
     </View>
   );
 }
