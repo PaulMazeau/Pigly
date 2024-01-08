@@ -43,21 +43,20 @@ const RestaurantMenu = ({ restaurantId }) => {
       </View>
     );
   };
-  // S'assurer que handleCarouselChange et selectCategory fonctionnent correctement
+
   const handleCarouselChange = (index) => {
-    console.log("Carousel changed to index: ", index); // Log pour déboguer
+    console.log("Carousel changed to indx: ", index);
     selectCategory(index);
   };
 
   const selectCategory = (index) => {
     setSelectedCategoryIndex(index);
-    // Log pour déboguer la catégorie sélectionnée
-    console.log(`Catégorie sélectionnée: ${Object.keys(categoryData)[index]}`, categoryData[Object.keys(categoryData)[index]]);
+    console.log(`La catégorie sélectionnée: ${Object.keys(categoryData)[index]}`, categoryData[Object.keys(categoryData)[index]]);
   };
 
   return (
     <View style={styles.container}>
-      {/* Titres des catégories */}
+      {/* Titres des catégories (cliquables)*/}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -84,15 +83,15 @@ const RestaurantMenu = ({ restaurantId }) => {
         ))}
       </ScrollView>
 
-      {/* Carousel pour les plats de la catégorie sélectionnée */}
+      {/* Carousel par catégorie sélectionnée */}
       {isLoadingComplete ? (
         <Carousel
-        data={Object.keys(categoryData)} // Passez toutes les catégories
-        renderItem={renderCategoryItems}
-          width={SLIDER_WIDTH}
-          height={SLIDER_WIDTH}
-          itemWidth={ITEM_WIDTH}
-          onSnapToItem={handleCarouselChange}
+        data={Object.keys(categoryData)} // On passe les donées
+        renderItem={renderCategoryItems}  // on affiche
+          width={SLIDER_WIDTH} // largeur du carousel =>  fonctionnel mais pas sur que ce soit le mieux.. 
+          height={SLIDER_WIDTH} // hauteur du carousel => fonctionnel mais pas sur que ce soit le mieux.. 
+          itemWidth={ITEM_WIDTH} // largeur des items =>  fonctionnel mais pas sur que ce soit le mieux.. 
+          onSnapToItem={handleCarouselChange} // lorsque l'on change de catégorie on change l'index
         />
       ) : (
         <Text>Chargement en cours...</Text>

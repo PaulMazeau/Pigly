@@ -1,18 +1,6 @@
 // Dans MenuContext.js
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useCallback,
-} from "react";
-import {
-  collection,
-  onSnapshot,
-  doc,
-  getDocs,
-  getDoc,
-} from "firebase/firestore";
+import React, { createContext, useState, useContext, useEffect, useCallback,} from "react";
+import { collection, onSnapshot, doc, getDocs, getDoc,} from "firebase/firestore";
 import { FB_DB } from "../firebaseconfig";
 
 const MenuContext = createContext();
