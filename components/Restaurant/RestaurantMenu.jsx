@@ -1,65 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Dimensions, Animated } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { main } from '../../constants/color';
 import { useMenu } from '../../context/MenuContext';
 
-const RestaurantMenu = ({ categories, restaurantId }) => {
+const RestaurantMenu = ({ restaurantId }) => {
   const [selectedCategoryIndex, setSelectedCategoryIndex] = useState(0);
-  const { categoryItems, fetchCategoryItems } = useMenu();
+  const { categoryData, fetchAllData } = useMenu();
+  const [isLoadingComplete, setIsLoadingComplete] = useState(false);
+  const [underlineAnim] = useState(new Animated.Value(0));
 
   const SLIDER_WIDTH = Dimensions.get('window').width * 0.85;
   const ITEM_WIDTH = SLIDER_WIDTH * 0.8; // 80% de la largeur de l'écran
-  console.log('Largeur du slider', SLIDER_WIDTH);
-  console.log('Largeur de l\'item', ITEM_WIDTH);
-  useEffect(() => {
-    if (categories.length > 0) {
-      // Initialiser avec la première catégorie
-      setSelectedCategoryIndex(0);
-      const firstCategory = categories[0].id;
-      fetchCategoryItems(restaurantId, firstCategory);
-    }
-  }, [categories, restaurantId, fetchCategoryItems]);
 
-  // Fonction pour changer de catégorie
-  const selectCategory = (index) => {
-    setSelectedCategoryIndex(index);
-    const category = categories[index].id;
-    fetchCategoryItems(restaurantId, category);
-    console.log('Changement de catégorie', category);
-    console.log('Items de la catégorie', categoryItems);
-  };
+  // Charger toutes les données au démarrage du composant
+  useEffect(() => {
+    setIsLoadingComplete(false);
+    fetchAllData(restaurantId).then(() => {
+      setIsLoadingComplete(true);
+      // Sélectionnez la première catégorie par défaut si possible
+      if (Object.keys(categoryData).length > 0) {
+        setSelectedCategoryIndex(0);
+      }
+    });
+  }, [restaurantId, fetchAllData]);
 
   // Afficher les éléments de la catégorie sélectionnée
-  const renderCategory = ({item, index}) => {
+  const renderCategoryItems = ({ item }) => {
+    const categoryItems = categoryData[item] || [];
+    
     return (
-      <View key={index} style={styles.categoryContainer}>
-        <Text style={styles.categoryTitle}>{item.nomCategorie}</Text>
-        <View style={styles.itemsList}>
-        {categoryItems.map(item => (
-        <View style={styles.RowMenu} key={item.id}>
-          <View style={styles.DetailsContainer}>
-            <Text style={styles.TitrePlat}>{item.titre}</Text>
-            <Text style={styles.DescriptionPlat}>{item.description}</Text>
+      <View style={styles.categoryContainer}>
+        {categoryItems.map((plat, index) => (
+          <View style={styles.RowMenu} key={plat.id || index}>
+            <View style={styles.DetailsContainer}>
+              <Text style={styles.TitrePlat}>{plat.titre}</Text>
+              <Text style={styles.DescriptionPlat}>{plat.description}</Text>
+            </View>
+            <Text style={styles.Prix}>{`${plat.prix} €`}</Text>
           </View>
-          <Text style={styles.Prix}>{`${item.prix} €`}</Text>
-        </View>
-      ))}
-        </View>
+        ))}
       </View>
     );
+  };
+  // S'assurer que handleCarouselChange et selectCategory fonctionnent correctement
+  const handleCarouselChange = (index) => {
+    console.log("Carousel changed to index: ", index); // Log pour déboguer
+    selectCategory(index);
+  };
+
+  const selectCategory = (index) => {
+    setSelectedCategoryIndex(index);
+    // Log pour déboguer la catégorie sélectionnée
+    console.log(`Catégorie sélectionnée: ${Object.keys(categoryData)[index]}`, categoryData[Object.keys(categoryData)[index]]);
   };
 
   return (
     <View style={styles.container}>
+      {/* Titres des catégories */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoriesScroll}
       >
-        {categories.map((category, index) => (
+        {Object.keys(categoryData).map((categoryName, index) => (
           <TouchableOpacity
-            key={category.id}
+            key={categoryName}
             style={[
               styles.categoryButton,
               index === selectedCategoryIndex && styles.categoryButtonSelected,
@@ -72,22 +78,29 @@ const RestaurantMenu = ({ categories, restaurantId }) => {
                 index === selectedCategoryIndex && styles.TitleSelected,
               ]}
             >
-              {category.id}
+              {categoryName}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
-      {/* Utiliser un Carousel pour les plats de la catégorie sélectionnée */}
-      <Carousel
-        data={categories} // Les données sont les items de la catégorie sélectionnée
-        renderItem={renderCategory}
-        width={SLIDER_WIDTH} // Définissez la largeur du curseur (généralement la largeur de l'écran
-        height={SLIDER_WIDTH}
-        itemWidth={ITEM_WIDTH} // Définissez la largeur de l'élément
-      />
+
+      {/* Carousel pour les plats de la catégorie sélectionnée */}
+      {isLoadingComplete ? (
+        <Carousel
+        data={Object.keys(categoryData)} // Passez toutes les catégories
+        renderItem={renderCategoryItems}
+          width={SLIDER_WIDTH}
+          height={SLIDER_WIDTH}
+          itemWidth={ITEM_WIDTH}
+          onSnapToItem={handleCarouselChange}
+        />
+      ) : (
+        <Text>Chargement en cours...</Text>
+      )}
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -113,24 +126,24 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   DetailsContainer: {
-    flex: 1, 
-    marginRight: 12, 
+    flex: 1,
+    marginRight: 12,
   },
   TitrePlat: {
     color: 'black',
     fontSize: 16,
-    fontWeight: 'bold', 
-    marginBottom: 4, 
+    fontWeight: 'bold',
+    marginBottom: 4,
   },
   DescriptionPlat: {
     color: 'rgba(0, 0, 0, .6)',
-    flexWrap: 'wrap', 
+    flexWrap: 'wrap',
   },
   Prix: {
-    width: 60, 
+    width: 60,
     fontSize: 16,
     color: 'black',
-    textAlign: 'right', 
+    textAlign: 'right',
   },
   categoryButton: {
     marginRight: 10,

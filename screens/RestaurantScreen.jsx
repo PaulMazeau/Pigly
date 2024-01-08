@@ -11,15 +11,12 @@ import RestaurantContext from '../context/RestaurantContext';
 import { FB_DB } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
 import { updateDoc, arrayUnion, arrayRemove, doc } from 'firebase/firestore';
-import { useMenu } from '../context/MenuContext';
 
 const RestaurantScreen = () => {
 
   const { restaurants } = useContext(RestaurantContext);
   const { profile } = useUser();
   
-  // Récupérer les catégories du menu
-  const { categories, fetchCategories } = useMenu();
 
   // Utiliser useRoute pour accéder aux paramètres de la route
   const route = useRoute(); 
@@ -32,13 +29,6 @@ const RestaurantScreen = () => {
   const restaurant = restaurants.find(restaurant => restaurant.id === restaurantId);
   
   console.log("Data du resto...");
-  
-  // Affiché les menus pour RestaurantMenu.jsx
-  useEffect(() => {
-    if (restaurantId) {
-      fetchCategories(restaurantId);
-    }
-  }, [restaurantId]);
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -122,7 +112,7 @@ const RestaurantScreen = () => {
             <RestaurantMap />
           </View>
         </View>
-        <RestaurantMenu categories={categories} restaurantId={restaurantId} />
+        <RestaurantMenu restaurantId={restaurantId} />
         </ScrollView>
     </View>
   );
