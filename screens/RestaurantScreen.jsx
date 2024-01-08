@@ -1,8 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet, Image, ScrollView, Button } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { View, Text, StyleSheet, Image, ScrollView, Button } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
