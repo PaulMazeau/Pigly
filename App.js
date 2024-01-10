@@ -1,14 +1,15 @@
-import 'react-native-gesture-handler';
-import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AuthStackComponent from './components/navigation/AuthStack';
-import MainStackComponent from './components/navigation/MainStack';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { AuthProvider, useAuth } from './context/AuthContext';
-import { RestaurantProvider } from './context/RestaurantContext';
-import { UserProvider } from './context/UserContext';
-import { MenuProvider } from './context/MenuContext';
+import "react-native-gesture-handler";
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import AuthStackComponent from "./components/navigation/AuthStack";
+import MainStackComponent from "./components/navigation/MainStack";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { RestaurantProvider } from "./context/RestaurantContext";
+import { UserProvider } from "./context/UserContext";
+import { MenuProvider } from "./context/MenuContext";
+import { AvisProvider } from "./context/AvisContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -19,15 +20,15 @@ const AppNavigator = () => {
   return (
     <Stack.Navigator>
       {currentUser ? (
-        <Stack.Screen 
-          name="Main" 
-          component={MainStackComponent} 
+        <Stack.Screen
+          name="Main"
+          component={MainStackComponent}
           options={{ headerShown: false }}
         />
       ) : (
-        <Stack.Screen 
-          name="Auth" 
-          component={AuthStackComponent} 
+        <Stack.Screen
+          name="Auth"
+          component={AuthStackComponent}
           options={{ headerShown: false }}
         />
       )}
@@ -41,13 +42,15 @@ export default function App() {
     <AuthProvider>
       <UserProvider>
         <RestaurantProvider>
-      <MenuProvider>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <NavigationContainer>
-              <AppNavigator />
-            </NavigationContainer>
-          </GestureHandlerRootView>
-        </MenuProvider>
+          <AvisProvider>
+            <MenuProvider>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <NavigationContainer>
+                  <AppNavigator />
+                </NavigationContainer>
+              </GestureHandlerRootView>
+            </MenuProvider>
+          </AvisProvider>
         </RestaurantProvider>
       </UserProvider>
     </AuthProvider>

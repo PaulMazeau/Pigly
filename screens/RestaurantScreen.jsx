@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet, Image, ScrollView, Button } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, Button, TouchableOpacity, Animated } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
 import RestaurantTag from '../components/Restaurant/RestaurantTag';
@@ -8,6 +8,15 @@ import RestaurantMap from '../components/Restaurant/RestaurantMap';
 import RestaurantReview from '../components/Restaurant/RestaurantReview';
 import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
 import RestaurantContext from '../context/RestaurantContext';
+import Rating from '../components/Restaurant/RestaurantRating';
+
+import Like from '../assets/icons/LikeThis.svg';
+import Liked from '../assets/icons/LikedThis.svg';
+import Dislike from '../assets/icons/DisLikeThis.svg';
+import DisLiked from '../assets/icons/DisLikedThis.svg';
+import Love from '../assets/icons/LoveThis.svg';
+import Loved from '../assets/icons/LovedThis.svg';
+
 import { FB_DB } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
 import { updateDoc, arrayUnion, arrayRemove, doc } from 'firebase/firestore';
@@ -29,6 +38,22 @@ const RestaurantScreen = () => {
   const restaurant = restaurants.find(restaurant => restaurant.id === restaurantId);
   
   console.log("Data du resto...");
+
+  // Avis déjà posé ou non ?
+  const [hasReviewed, setHasReviewed] = useState(false);
+  useEffect(() => {
+      console.log('Vérification des avis pour le restaurant', restaurantId, profile?.uid);
+  
+      const existingReview = profile?.Reviews?.find(review => review.restaurantId === restaurantId);
+  
+      if (existingReview) {
+          setHasReviewed(true);
+          console.log('Avis déjà posté pour ce restaurant', restaurantId, existingReview);
+      } else {
+          setHasReviewed(false);
+          console.log('Avis non posté pour ce restaurant', restaurantId);
+      }
+  }, [restaurantId, profile?.uid, profile?.Reviews]);
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -80,6 +105,17 @@ const RestaurantScreen = () => {
     }
   };
 
+  const navigation = useNavigation();
+  const UserId = profile.uid;
+  // Fonction pour rediriger vers la page de dépôt d'avis
+  const reviewRedirection = () => {
+    navigation.navigate('ReviewScreen', { restaurantId: restaurantId, userId: UserId });
+  };
+  const handleRating = (newRating) => {
+    // Ici, vous pouvez appeler votre fonction back-end pour enregistrer la nouvelle note
+    console.log(`Nouvel avis pour le restaurant ${restaurantId} : ${newRating}`);
+    // Par exemple : updateRestaurantRating(restaurantId, newRating);
+  };
 
   return (
     <View style={styles.page}>
@@ -103,6 +139,12 @@ const RestaurantScreen = () => {
         ) : (
           <Button title="Ajouter aux favoris" onPress={addToFavorites} />
         )}
+        
+        <Button
+                title={hasReviewed ? "Mettre à jour l'avis" : "Poster un avis"}
+                onPress={reviewRedirection}
+            />
+        <Rating onRating={handleRating} />
         <View style={styles.gridContainer}>
           <View style={styles.leftColumn}>
             <RestaurantDescription />

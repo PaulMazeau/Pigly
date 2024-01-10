@@ -5,6 +5,7 @@ import ProfileScreen from '../../screens/ProfileScreen';
 import RestaurantScreen from '../../screens/RestaurantScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
 import Map from '../../screens/Map';
+import ReviewScreen from '../../screens/ReviewScreen';
 
 import Home from '../../assets/icons/Home.svg';
 import Profile from '../../assets/icons/Profile.svg';
@@ -56,6 +57,11 @@ export default function TabBarStackComponent({ route }) {
             <Tab.Screen 
                 name="SettingsScreen" 
                 component={SettingsScreen}
+                options={{ tabBarButton: () => null }}
+            />
+            <Tab.Screen 
+                name="ReviewScreen" 
+                component={ReviewScreen}
                 options={{ tabBarButton: () => null }}
             />
         </Tab.Navigator>

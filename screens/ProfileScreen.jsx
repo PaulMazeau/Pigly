@@ -3,14 +3,14 @@ import { StyleSheet, Text, View, Button, ScrollView } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Reusable/Header'
 import { signOut } from 'firebase/auth';
-import { FB_AUTH, FB_DB } from '../firebaseconfig';
+import { FB_AUTH } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
 import RestaurantContext from '../context/RestaurantContext';
 import RestaurantCard from '../components/Home/RestaurantCard';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
-    const { profile } = useUser();
+    const { profile } = useUser(); 
     console.log({ profile });
 
     const { restaurants } = useContext(RestaurantContext);
