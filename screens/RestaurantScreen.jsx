@@ -1,108 +1,32 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, StyleSheet, Image, ScrollView, Button, TouchableOpacity, Animated } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
 import RestaurantTag from '../components/Restaurant/RestaurantTag';
 import RestaurantMap from '../components/Restaurant/RestaurantMap';
 import RestaurantReview from '../components/Restaurant/RestaurantReview';
 import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
 import RestaurantContext from '../context/RestaurantContext';
-import Rating from '../components/Restaurant/RestaurantRating';
-
-import Like from '../assets/icons/LikeThis.svg';
-import Liked from '../assets/icons/LikedThis.svg';
-import Dislike from '../assets/icons/DisLikeThis.svg';
-import DisLiked from '../assets/icons/DisLikedThis.svg';
-import Love from '../assets/icons/LoveThis.svg';
-import Loved from '../assets/icons/LovedThis.svg';
-
-import { FB_DB } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
-import { updateDoc, arrayUnion, arrayRemove, doc } from 'firebase/firestore';
 
 const RestaurantScreen = () => {
-
   const { restaurants } = useContext(RestaurantContext);
-  const { profile } = useUser();
-  
+  const { likes, addLike, removeLike } = useUser();
 
-  // Utiliser useRoute pour accéder aux paramètres de la route
-  const route = useRoute(); 
-  
-  // Récupérer l'ID du restaurant passé en paramètre
-  const restaurantId = route.params?.restaurantId; 
+  const route = useRoute();
+  const restaurantId = route.params?.restaurantId;
+  const restaurant = restaurants.find(r => r.id === restaurantId);
+
+  const isFavorite = likes.includes(restaurantId);
 
   
-  // Trouver le restaurant correspondant par ID
-  const restaurant = restaurants.find(restaurant => restaurant.id === restaurantId);
-  
-  console.log("Data du resto...");
-
-  // Avis déjà posé ou non ?
-  const [hasReviewed, setHasReviewed] = useState(false);
-  useEffect(() => {
-      console.log('Vérification des avis pour le restaurant', restaurantId, profile?.uid);
-  
-      const existingReview = profile?.Reviews?.find(review => review.restaurantId === restaurantId);
-  
-      if (existingReview) {
-          setHasReviewed(true);
-          console.log('Avis déjà posté pour ce restaurant', restaurantId, existingReview);
-      } else {
-          setHasReviewed(false);
-          console.log('Avis non posté pour ce restaurant', restaurantId);
-      }
-  }, [restaurantId, profile?.uid, profile?.Reviews]);
-
-  const [isFavorite, setIsFavorite] = useState(false);
-
-  // Vérifier si le restaurant actuel est dans les favoris
-  useEffect(() => {
-    console.log('Vérification des favoris pour le restaurant', restaurant.id );
-    if (profile?.Favoris?.includes(restaurant.id)) {
-      setIsFavorite(true);
-      console.log('Restaurant dans les favoris', restaurant.id, profile.Favoris);
-    } else {
-      setIsFavorite(false);
-      console.log('Restaurant pas dans les favoris', restaurant.id, profile.Favoris);
-    }
-  }, [profile, restaurantId]);
-  
-  // Fonction pour ajouter aux favoris
-  const addToFavorites = async () => {
-    if (profile && profile.uid && restaurant.id) {
-      const userRef = doc(FB_DB, 'users', profile.uid);
-      try {
-        await updateDoc(userRef, {
-          Favoris: arrayUnion(restaurant.id)
-        });
-        setIsFavorite(true); // Mettre à jour l'état
-        console.log(`Restaurant ID: ${restaurant.id} ajouté aux favoris!`);
-      } catch (error) {
-        console.error('Erreur lors de l\'ajout aux favoris:', error);
-      }
-    } else {
-      console.log('Informations manquantes pour ajouter aux favoris');
-    }
+  const addToFavorites = () => {
+    addLike(restaurantId);
   };
 
-  // Fonction pour supprimer des favoris
-  const removeFromFavorites = async () => {
-    if (profile && profile.uid && restaurant.id) {
-      const userRef = doc(FB_DB, 'users', profile.uid);
-      try {
-        await updateDoc(userRef, {
-          Favoris: arrayRemove(restaurant.id)
-        });
-        setIsFavorite(false); // Mettre à jour l'état
-        console.log(`Restaurant ID: ${restaurant.id} retiré des favoris!`);
-      } catch (error) {
-        console.error('Erreur lors du retrait des favoris:', error);
-      }
-    } else {
-      console.log('Informations manquantes pour retirer des favoris');
-    }
+  const removeFromFavorites = () => {
+    removeLike(restaurantId);
   };
 
   const navigation = useNavigation();

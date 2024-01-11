@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import Header from '../components/Reusable/Header'
+import Header from '../components/Reusable/Header';
 import { signOut } from 'firebase/auth';
 import { FB_AUTH } from '../firebaseconfig';
 import { useUser } from '../context/UserContext';
@@ -10,21 +10,20 @@ import RestaurantCard from '../components/Home/RestaurantCard';
 
 export default function ProfileScreen() {
     const navigation = useNavigation();
-    const { profile } = useUser(); 
+    const { profile, likes } = useUser();
     console.log({ profile });
 
     const { restaurants } = useContext(RestaurantContext);
     const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
 
     useEffect(() => {
-        // Filtrer pour obtenir uniquement les restaurants favoris
+        // Filtrer pour obtenir uniquement les restaurants favoris basés sur les likes
         const updatedFavorites = restaurants.filter(restaurant =>
-            profile.Favoris?.includes(restaurant.id)
+            likes.includes(restaurant.id)
         );
         setFavoriteRestaurants(updatedFavorites);
         console.log("Favoris mis à jour depuis le contexte", updatedFavorites);
-    }, [profile.Favoris, restaurants]); 
-
+    }, [likes, restaurants]);
 
     const handleSignOut = () => {
         signOut(FB_AUTH)

@@ -1,22 +1,45 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, TouchableWithoutFeedback } from 'react-native';
-import ArrowUp from '../../assets/icons/ArrowUp.svg'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ImageBackground, TouchableWithoutFeedback } from 'react-native';
+import ArrowUp from '../../assets/icons/ArrowUp.svg';
+import Save from '../../assets/icons/Save.svg';
+import SaveFill from '../../assets/icons/SaveFill.svg';
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../../context/UserContext';
 
 function ImageCarroussel({restaurant}) {
-
     const navigation = useNavigation();
+    const { likes, addLike, removeLike } = useUser(); // Utilisez useUser
+    const [isSaved, setIsSaved] = useState(likes.includes(restaurant.id)); // Initialisez isSaved
+
+    useEffect(() => {
+        setIsSaved(likes.includes(restaurant.id)); // Mettez à jour isSaved lorsque les likes changent
+    }, [likes, restaurant.id]);
+
+    const handleSaveClick = () => {
+        if (isSaved) {
+            removeLike(restaurant.id); // Appeler removeLike si le restaurant est déjà en favori
+        } else {
+            addLike(restaurant.id); // Appeler addLike si le restaurant n'est pas en favori
+        }
+    };
 
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen', { restaurantId: restaurant.id })}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen', { restaurantId: restaurant.id })}>
             <View style={styles.container}>
-            <ImageBackground source={{ uri: restaurant.photo[0] }} style={styles.image}>
-            <View style={styles.bottom}>
-                <View>
-                    <Text style={styles.title}>{restaurant.nom}</Text>
-                    <Text style={styles.description}>{restaurant.description}</Text>
+                <ImageBackground source={{ uri: restaurant.photo[0] }} style={styles.image}>
+                    <View style={styles.layout}>
+                        <View style={styles.top}>
+                            <TouchableWithoutFeedback onPress={handleSaveClick}>
+                                {isSaved ? <SaveFill width={48} height={48}/> : <Save width={48} height={48} />}
+                            </TouchableWithoutFeedback>
+                        </View>
+                    <View style={styles.bottom}>
+                        <View>
+                            <Text style={styles.title}>{restaurant.nom}</Text>
+                            <Text style={styles.description}>{restaurant.description}</Text>
+                        </View>
+                    <ArrowUp width={48} height={48} color={'white'}/>
                 </View>
-            <ArrowUp width={48} height={48} color={'white'}/>
             </View>
             </ImageBackground> 
         </View>
@@ -48,8 +71,17 @@ const styles = StyleSheet.create({
         color: 'white',
         maxWidth: '85%'
     },
+    layout: {
+        display: "flex",
+        justifyContent: "space-between",
+        height: '100%',
+        width: '100%',
+        padding: 20,
+    },
+    top: {
+        alignItems: 'flex-end'
+    },
     bottom: {
-        padding: 14,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'flex-end'

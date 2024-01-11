@@ -35,3 +35,6 @@ yarn-error.*
 *.tsbuildinfo
 
 .env
+
+#firebase log (contient d clef privée)
+firebase-debug.log
