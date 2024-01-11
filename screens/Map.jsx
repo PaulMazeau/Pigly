@@ -35,8 +35,6 @@ export default function Map({ navigation }) {
   }, []);
 
   return (
-    <View style={styles.parent}>
-
     <View style={styles.container}>
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
@@ -60,7 +58,6 @@ export default function Map({ navigation }) {
           <Text>La map est en cours de chargement</Text>
         </View>
       )}
-    </View>
     </View>
   );
 };
