@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, Button, View, Alert } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import Header from '../components/Reusable/Header';
 import RestaurantMoodCard from '../components/MoodPicker/RestaurantMoodCard';
 import BarMoodCard from '../components/MoodPicker/BarMoodCard';
 import { useUser } from '../context/UserContext';
-import { FB_AUTH } from '../firebaseconfig';
 
 export default function MoodPickerScreen() {
   const { profile, location } = useUser();
