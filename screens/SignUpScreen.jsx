@@ -2,9 +2,8 @@ import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } fro
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { FB_AUTH, FB_DB } from '../firebaseconfig';
+import { FB_DB } from '../firebaseconfig';
 import { doc, setDoc } from 'firebase/firestore';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { main } from '../constants/color';
 
 export default function SignUpScreen() {
@@ -61,14 +60,10 @@ export default function SignUpScreen() {
                 setDoc(userDocRef, {
                     FirstName: firstName,
                     LastName: lastName,
-                    // Vous pouvez ajouter d'autres champs si nécessaire
                 })
                 .then(() => {
                     console.log('Informations de lutilisateur enregistrées dans Firestore');
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'Main' }],
-                    });
+                    navigation.navigate('TastePicker')
                 })
                 .catch((error) => {
                     console.error('Erreur lors de lenregistrement des informations de lutilisateur:', error);
@@ -153,7 +148,7 @@ export default function SignUpScreen() {
                 <Text>S'inscrire</Text>
             </TouchableOpacity>
 
-            <View style={styles.rowseparator}>
+            {/* <View style={styles.rowseparator}>
                 <View style={styles.separator} />
                 <Text style={styles.txtseparator}>Ou</Text>
                 <View style={styles.separator} />
@@ -170,7 +165,7 @@ export default function SignUpScreen() {
                 style={styles.buttonFacebook}
             >
                 <Text style={styles.txtBtn2}>S'inscrire avec facebook</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('SignIn')}

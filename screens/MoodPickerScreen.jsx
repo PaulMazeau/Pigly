@@ -17,30 +17,30 @@ export default function MoodPickerScreen() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const callHelloWorldFunction = async () => {
-    try {
-      const user = FB_AUTH.currentUser;
-      if (user) {
-        const idToken = await user.getIdToken();
+  // const callHelloWorldFunction = async () => {
+  //   try {
+  //     const user = FB_AUTH.currentUser;
+  //     if (user) {
+  //       const idToken = await user.getIdToken();
   
-        const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${idToken}`
-          },
-        });
+  //       const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
+  //         method: 'GET',
+  //         headers: {
+  //           Authorization: `Bearer ${idToken}`
+  //         },
+  //       });
   
-        if (!response.ok) {
-          throw new Error('Problème de réponse du serveur');
-        }
+  //       if (!response.ok) {
+  //         throw new Error('Problème de réponse du serveur');
+  //       }
   
-        const data = await response.text();
-        Alert.alert('Réponse de la fonction:', data);
-      }
-    } catch (error) {
-      Alert.alert('Erreur', error.toString());
-    }
-  };
+  //       const data = await response.text();
+  //       Alert.alert('Réponse de la fonction:', data);
+  //     }
+  //   } catch (error) {
+  //     Alert.alert('Erreur', error.toString());
+  //   }
+  // };
   
 
   if (!profile) {
@@ -56,12 +56,12 @@ export default function MoodPickerScreen() {
       </View>
       <RestaurantMoodCard />
       <BarMoodCard />
-      <Button
+      {/* <Button
         title="Test Clound function"
         onPress={callHelloWorldFunction}
         disabled={isLoading}
       />
-      {isLoading && <Text>Chargement de la réponse...</Text>}
+      {isLoading && <Text>Chargement de la réponse...</Text>} */}
     </View>
   );
 }

@@ -65,6 +65,7 @@ export default function ProfileScreen() {
                     <Text>Aucun restaurant en favoris.</Text>
                 )}
             </ScrollView>
+            
             <Button
                 title="Déconnexion"
                 onPress={handleSignOut}

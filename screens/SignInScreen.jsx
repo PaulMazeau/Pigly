@@ -1,6 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput, Alert } from 'react-native'
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { FB_AUTH } from '../firebaseconfig';
+import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity, TextInput } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react'
 import { useAuth } from '../context/AuthContext';
@@ -32,7 +30,6 @@ export default function SignInScreen() {
         if (isValid) {
             signIn(email, password)
                 .then(() => {
-                    callHelloWorldFunction();
                     navigation.reset({
                         index: 0,
                         routes: [{ name: 'Main' }],
@@ -44,31 +41,6 @@ export default function SignInScreen() {
                     }
                     console.error('Erreur lors de la connexion:', error);
                 });
-        }
-    };
-
-    const callHelloWorldFunction = async () => {
-        try {
-            const user = FB_AUTH.currentUser;
-            if (user) {
-                const idToken = await user.getIdToken();
-                console.log(idToken)
-                const response = await fetch('https://us-central1-pigly-7ae8a.cloudfunctions.net/helloWorld', {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${idToken}`
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error('Problème de réponse du serveur');
-                }
-
-                const data = await response.text();
-                Alert.alert('Réponse de la fonction:', data);
-            }
-        } catch (error) {
-            Alert.alert('Erreur', error.toString());
         }
     };
 
@@ -116,7 +88,8 @@ export default function SignInScreen() {
             >
                 <Text style={styles.txtBtn2}>Mot de passe oublier ?</Text>
             </TouchableOpacity>
-            <View style={styles.rowseparator}>
+
+            {/* <View style={styles.rowseparator}>
                 <View style={styles.separator} />
                 <Text style={styles.txtseparator}>Ou</Text>
                 <View style={styles.separator} />
@@ -133,7 +106,8 @@ export default function SignInScreen() {
                 style={styles.buttonFacebook}
             >
                 <Text style={styles.txtBtn2}>Se connecter avec facebook</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
+
             <TouchableOpacity
                 onPress={() => navigation.navigate('SignUp')}
                 style={styles.button2}

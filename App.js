@@ -1,5 +1,6 @@
 import 'react-native-gesture-handler';
 import React from 'react';
+import { ActivityIndicator, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthStackComponent from './components/navigation/AuthStack';
@@ -9,21 +10,38 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { RestaurantProvider } from './context/RestaurantContext';
 import { UserProvider } from './context/UserContext';
 import { MenuProvider } from './context/MenuContext';
+import TastePickerScreen from './screens/TastePicker';
 
 const Stack = createNativeStackNavigator();
 
 // Composant AppNavigator
 const AppNavigator = () => {
-  const { currentUser } = useAuth();
+  const { currentUser, hasCompletedTastePicker, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <Stack.Navigator>
       {currentUser ? (
-        <Stack.Screen 
-          name="Main" 
-          component={MainStackComponent} 
-          options={{ headerShown: false }}
-        />
+        hasCompletedTastePicker ? (
+          <Stack.Screen 
+            name="Main" 
+            component={MainStackComponent} 
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen 
+            name="TastePicker" 
+            component={TastePickerScreen} 
+            options={{ headerShown: false }}
+          />
+        )
       ) : (
         <Stack.Screen 
           name="Auth" 
@@ -33,7 +51,7 @@ const AppNavigator = () => {
       )}
     </Stack.Navigator>
   );
-};
+}
 
 // Composant App
 export default function App() {

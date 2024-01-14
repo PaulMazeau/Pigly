@@ -14,7 +14,7 @@ import { main } from '../../constants/color';
 const Tab = createBottomTabNavigator();
 
 export default function TabBarStackComponent({ route }) {
-    const initialRouteName = route.params?.screen || "MoodPickerScreen"; // Utilisez le paramètre 'screen' si disponible
+    const initialRouteName = route.params?.screen || "MoodPickerScreen";
     return (
         <Tab.Navigator 
             initialRouteName={initialRouteName}
