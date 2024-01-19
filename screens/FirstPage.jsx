@@ -18,6 +18,12 @@ export default function FirstPage({ navigation }) {
         onPress={() => navigation.navigate('SignIn')}
         color="#2196F3"
       />
+
+      <Button 
+        title="TastePicker"
+        onPress={() => navigation.navigate('TastePicker')}
+        color="#2196F3"
+      />
     </View>
   );
 }

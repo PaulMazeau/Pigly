@@ -48,6 +48,17 @@ export default function ProfileScreen() {
             <Header />
             <Text>Bonjour {profile.FirstName} {profile.LastName}!</Text>
             <Text>ID du document Firebase: {profile.uid}</Text>
+            <Text>Vos goûts :</Text>
+            {profile.tastes && profile.tastes.length > 0 ? (
+                <View>
+                    {profile.tastes.map((taste, index) => (
+                        <Text key={index}>{taste}</Text>
+                    ))}
+                </View>
+            ) : (
+                <Text>Vous n'avez pas encore sélectionné de goûts.</Text>
+            )}
+
             <Text>Restaurants Favoris:</Text>
             <ScrollView
                 horizontal
@@ -55,8 +66,6 @@ export default function ProfileScreen() {
                 contentContainerStyle={styles.containerCarrousel}
                 keyboardShouldPersistTaps="handled"
             >
-
-
                 {favoriteRestaurants.length ? (
                     favoriteRestaurants.map((restaurant) => (
                         <RestaurantCard key={restaurant.id} restaurant={restaurant} />
@@ -65,6 +74,7 @@ export default function ProfileScreen() {
                     <Text>Aucun restaurant en favoris.</Text>
                 )}
             </ScrollView>
+            
             <Button
                 title="Déconnexion"
                 onPress={handleSignOut}

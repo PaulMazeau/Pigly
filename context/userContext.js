@@ -77,12 +77,30 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const addTastes = async (tasteList) => {
+    if (currentUser && currentUser.uid) {
+      const userRef = doc(FB_DB, 'users', currentUser.uid);
+      try {
+        await updateDoc(userRef, {
+          tastes: arrayUnion(...tasteList) // Utilisez arrayUnion pour ajouter des éléments uniques
+        });
+        // Mettez à jour le profil local avec les nouveaux goûts
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          tastes: [...(prevProfile.tastes || []), ...tasteList]
+      }));
+    } catch (error) {
+  console.error('Error updating tastes:', error);
+  }}}
+  
+
   const value = {
     profile,
     location,
     likes,
     addLike,
-    removeLike
+    removeLike,
+    addTastes
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
