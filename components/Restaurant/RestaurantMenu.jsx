@@ -55,12 +55,7 @@ const RestaurantMenu = ({ restaurantId }) => {
   };
 
   return (
-    <ScrollView
-      style={styles.outerContainer}
-      showsVerticalScrollIndicator={false}>
-
     <View style={styles.container}>
-      
       {/* Titres des catégories (cliquables)*/}
       <ScrollView
         horizontal
@@ -102,7 +97,6 @@ const RestaurantMenu = ({ restaurantId }) => {
         <Text>Chargement en cours...</Text>
       )}
     </View>
-    </ScrollView>
   );
 };
 

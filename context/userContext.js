@@ -92,15 +92,32 @@ export const UserProvider = ({ children }) => {
     } catch (error) {
   console.error('Error updating tastes:', error);
   }}}
+  const toggleNotifications = async (newNotificationValue) => {
+    if (currentUser && currentUser.uid) {
+      const userRef = doc(FB_DB, 'users', currentUser.uid);
+      try {
+        await updateDoc(userRef, {
+          notifications: newNotificationValue
+        });
+        setProfile((prevProfile) => ({
+          ...prevProfile,
+          notifications: newNotificationValue
+        }));
+      } catch (error) {
+        console.error('Error toggling notifications:', error);
+      }
+    }
+  };
   
-
+  
   const value = {
     profile,
     location,
     likes,
     addLike,
     removeLike,
-    addTastes
+    addTastes,
+    toggleNotifications
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

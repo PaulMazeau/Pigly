@@ -6,7 +6,8 @@ import RestaurantScreen from '../../screens/RestaurantScreen';
 import SettingsScreen from '../../screens/SettingsScreen';
 import Map from '../../screens/Map';
 import ReviewScreen from '../../screens/ReviewScreen';
-
+import ChangePasswordScreen from '../../screens/ChangePasswordScreen';
+import ChangeEmailScreen from '../../screens/ChangeEmailScreen';
 import Home from '../../assets/icons/Home.svg';
 import Profile from '../../assets/icons/Profile.svg';
 import Search from '../../assets/icons/Search.svg';
@@ -62,6 +63,16 @@ export default function TabBarStackComponent({ route }) {
             <Tab.Screen 
                 name="ReviewScreen" 
                 component={ReviewScreen}
+                options={{ tabBarButton: () => null }}
+            />
+            <Tab.Screen 
+                name="ChangePasswordScreen" 
+                component={ChangePasswordScreen}
+                options={{ tabBarButton: () => null }}
+            />
+            <Tab.Screen 
+                name="ChangeEmailScreen" 
+                component={ChangeEmailScreen}
                 options={{ tabBarButton: () => null }}
             />
         </Tab.Navigator>

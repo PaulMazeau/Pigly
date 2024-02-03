@@ -1,37 +1,47 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, StyleSheet, Image, ScrollView, Button, TouchableOpacity, Animated } from 'react-native';
-import { useRoute } from '@react-navigation/native';
+import { View, Text, StyleSheet, Image, ScrollView, Button, TouchableWithoutFeedback, Vibration } from 'react-native';
+import { useRoute, useNavigation } from '@react-navigation/native';
 import RestaurantDescription from '../components/Restaurant/RestaurantDescription';
 import RestaurantTag from '../components/Restaurant/RestaurantTag';
 import RestaurantMap from '../components/Restaurant/RestaurantMap';
 import RestaurantReview from '../components/Restaurant/RestaurantReview';
 import RestaurantMenu from '../components/Restaurant/RestaurantMenu';
 import RestaurantContext from '../context/RestaurantContext';
+import RestaurantRating from '../components/Restaurant/RestaurantRating';
 import { useUser } from '../context/UserContext';
+import Save from '../assets/icons/Save.svg';
+import SaveFill from '../assets/icons/SaveFill.svg';
+import * as Haptics from 'expo-haptics';
 
 const RestaurantScreen = () => {
   const { restaurants } = useContext(RestaurantContext);
-  const { likes, addLike, removeLike } = useUser();
 
   const route = useRoute();
   const restaurantId = route.params?.restaurantId;
   const restaurant = restaurants.find(r => r.id === restaurantId);
 
-  const isFavorite = likes.includes(restaurantId);
+  const { likes, addLike, removeLike, profile } = useUser(); // Utilisez useUser
+  const [isSaved, setIsSaved] = useState(likes.includes(restaurantId));
 
-  
-  const addToFavorites = () => {
-    addLike(restaurantId);
-  };
+  useEffect(() => {
+    setIsSaved(likes.includes(restaurantId)); // Mettez à jour isSaved lorsque les likes changent
+  }, [likes, restaurantId]);
 
-  const removeFromFavorites = () => {
-    removeLike(restaurantId);
+  const handleSaveClick = () => {
+    Haptics.notificationAsync(
+      Haptics.NotificationFeedbackType.Success
+    )
+    if (isSaved) {
+      removeLike(restaurantId); // Appeler removeLike si le restaurant est déjà en favori
+    } else {
+      addLike(restaurantId); // Appeler addLike si le restaurant n'est pas en favori
+    }
   };
 
   const navigation = useNavigation();
   const UserId = profile.uid;
-  // Fonction pour rediriger vers la page de dépôt d'avis
+  // Fonction pour rediriger vers la page de dépôt d'avisr
   const reviewRedirection = () => {
     navigation.navigate('ReviewScreen', { restaurantId: restaurantId, userId: UserId });
   };
@@ -44,10 +54,15 @@ const RestaurantScreen = () => {
   return (
     <View style={styles.page}>
       <StatusBar style="light" />
-      <Image source={{ uri: restaurant?.photo[0] }} style={styles.image} />
+        
+        <Image source={{ uri: restaurant?.photo[0] }} style={styles.image} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <Text style={styles.title}>{restaurant?.nom}</Text>
-
+      <View style={styles.row}>
+      <Text style={styles.title}>{restaurant?.nom}</Text>
+      <TouchableWithoutFeedback onPress={handleSaveClick} >
+          {isSaved ? <SaveFill style={styles.save} width={48} height={48} /> : <Save style={styles.save} width={48} height={48}/>}
+      </TouchableWithoutFeedback>
+      </View>
         <View style={styles.tagContainer}>
           {restaurant.tag.map((tag, index) => {
             return (
@@ -58,17 +73,9 @@ const RestaurantScreen = () => {
             );
           })}
         </View>
-        {isFavorite ? (
-          <Button title="Retirer des favoris" onPress={removeFromFavorites} />
-        ) : (
-          <Button title="Ajouter aux favoris" onPress={addToFavorites} />
-        )}
         
-        <Button
-                title={hasReviewed ? "Mettre à jour l'avis" : "Poster un avis"}
-                onPress={reviewRedirection}
-            />
-        <Rating onRating={handleRating} />
+
+        <RestaurantRating/>
         <View style={styles.gridContainer}>
           <View style={styles.leftColumn}>
             <RestaurantDescription />
@@ -79,7 +86,7 @@ const RestaurantScreen = () => {
           </View>
         </View>
         <RestaurantMenu restaurantId={restaurantId} />
-        </ScrollView>
+      </ScrollView>
     </View>
   );
 };
@@ -95,6 +102,14 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 435,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10
+  },
+  save: {
+    marginTop: -10,
   },
   title: {
     fontSize: 24,

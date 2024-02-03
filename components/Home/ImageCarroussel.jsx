@@ -5,6 +5,8 @@ import Save from '../../assets/icons/Save.svg';
 import SaveFill from '../../assets/icons/SaveFill.svg';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
+import * as Haptics from 'expo-haptics';
+
 
 function ImageCarroussel({restaurant}) {
     const navigation = useNavigation();
@@ -16,15 +18,23 @@ function ImageCarroussel({restaurant}) {
     }, [likes, restaurant.id]);
 
     const handleSaveClick = () => {
+        Haptics.notificationAsync(
+            Haptics.NotificationFeedbackType.Success
+          )
         if (isSaved) {
             removeLike(restaurant.id); // Appeler removeLike si le restaurant est déjà en favori
         } else {
             addLike(restaurant.id); // Appeler addLike si le restaurant n'est pas en favori
         }
     };
+    const redirectToRestaurantScreen = (restaurantId) => {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium)
+        navigation.navigate('RestaurantScreen', { restaurantId });
+      };
+    
 
         return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('RestaurantScreen', { restaurantId: restaurant.id })}>
+        <TouchableWithoutFeedback onPress={() => redirectToRestaurantScreen(restaurant.id)}>
             <View style={styles.container}>
                 <ImageBackground source={{ uri: restaurant.photo[0] }} style={styles.image}>
                     <View style={styles.layout}>
