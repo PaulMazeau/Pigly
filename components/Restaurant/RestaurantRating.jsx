@@ -29,16 +29,17 @@ const Rating = ({ onRating }) => {
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      <Animated.View style={{ transform: [{ scale: rating === 'like' ? scaleAnim : 1 }] }}>
-        <TouchableOpacity onPress={() => animateIcon('like')}>
-          <LikeIcon fill={rating === 'like' ? 'blue' : 'grey'} />
-        </TouchableOpacity>
-      </Animated.View>
       <Animated.View style={{ transform: [{ scale: rating === 'dislike' ? scaleAnim : 1 }] }}>
         <TouchableOpacity onPress={() => animateIcon('dislike')}>
           <DisLikeIcon fill={rating === 'dislike' ? 'red' : 'grey'} />
         </TouchableOpacity>
       </Animated.View>
+      <Animated.View style={{ transform: [{ scale: rating === 'like' ? scaleAnim : 1 }] }}>
+        <TouchableOpacity onPress={() => animateIcon('like')}>
+          <LikeIcon fill={rating === 'like' ? 'blue' : 'grey'} />
+        </TouchableOpacity>
+      </Animated.View>
+
       <Animated.View style={{ transform: [{ scale: rating === 'love' ? scaleAnim : 1 }] }}>
         <TouchableOpacity onPress={() => animateIcon('love')}>
           <LoveIcon fill={rating === 'love' ? 'green' : 'grey'} />

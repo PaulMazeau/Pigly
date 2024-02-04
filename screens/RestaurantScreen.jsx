@@ -41,14 +41,25 @@ const RestaurantScreen = () => {
 
   const navigation = useNavigation();
   const UserId = profile.uid;
-  // Fonction pour rediriger vers la page de dépôt d'avisr
-  const reviewRedirection = () => {
-    navigation.navigate('ReviewScreen', { restaurantId: restaurantId, userId: UserId });
-  };
-  const handleRating = (newRating) => {
-    // Ici, vous pouvez appeler votre fonction back-end pour enregistrer la nouvelle note
-    console.log(`Nouvel avis pour le restaurant ${restaurantId} : ${newRating}`);
-    // Par exemple : updateRestaurantRating(restaurantId, newRating);
+
+  // Logique des pouces qui redirige vers ReviewScreen en fonction du pouce sélectionné
+  const handleRating = (rating) => {
+    let score;
+    switch (rating) {
+      case 'dislike':
+        score = 0;
+        break;
+      case 'like':
+        score = 1;
+        break;
+      case 'love':
+        score = 2;
+        break;
+      default:
+        score = 0; // Par défaut, si aucun cas ne correspond
+    }
+  
+    navigation.navigate('ReviewScreen', { restaurantId: restaurantId, userId: UserId, initialScore: score });
   };
 
   return (
@@ -75,7 +86,7 @@ const RestaurantScreen = () => {
         </View>
         
 
-        <RestaurantRating/>
+        <RestaurantRating onRating={handleRating} />
         <View style={styles.gridContainer}>
           <View style={styles.leftColumn}>
             <RestaurantDescription />
