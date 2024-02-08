@@ -21,11 +21,11 @@ const RestaurantScreen = () => {
   const restaurantId = route.params?.restaurantId;
   const restaurant = restaurants.find(r => r.id === restaurantId);
 
-  const { likes, addLike, removeLike, profile } = useUser(); // Utilisez useUser
+  const { likes, addLike, removeLike, profile } = useUser();
   const [isSaved, setIsSaved] = useState(likes.includes(restaurantId));
 
   useEffect(() => {
-    setIsSaved(likes.includes(restaurantId)); // Mettez à jour isSaved lorsque les likes changent
+    setIsSaved(likes.includes(restaurantId)); // Mettez à jour Saved lorsque les likes changent
   }, [likes, restaurantId]);
 
   const handleSaveClick = () => {
@@ -33,11 +33,13 @@ const RestaurantScreen = () => {
       Haptics.NotificationFeedbackType.Success
     )
     if (isSaved) {
-      removeLike(restaurantId); // Appeler removeLike si le restaurant est déjà en favori
+      removeLike(restaurantId);
     } else {
-      addLike(restaurantId); // Appeler addLike si le restaurant n'est pas en favori
+      addLike(restaurantId);
     }
   };
+  // Données du restaurant
+  console.log(restaurant);
 
   const navigation = useNavigation();
   const UserId = profile.uid;
@@ -56,7 +58,7 @@ const RestaurantScreen = () => {
         score = 2;
         break;
       default:
-        score = 0; // Par défaut, si aucun cas ne correspond
+        score = 0;
     }
   
     navigation.navigate('ReviewScreen', { restaurantId: restaurantId, userId: UserId, initialScore: score });
@@ -65,14 +67,15 @@ const RestaurantScreen = () => {
   return (
     <View style={styles.page}>
       <StatusBar style="light" />
-        
         <Image source={{ uri: restaurant?.photo[0] }} style={styles.image} />
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View style={styles.row}>
       <Text style={styles.title}>{restaurant?.nom}</Text>
+      <RestaurantRating onRating={handleRating} />
       <TouchableWithoutFeedback onPress={handleSaveClick} >
           {isSaved ? <SaveFill style={styles.save} width={48} height={48} /> : <Save style={styles.save} width={48} height={48}/>}
       </TouchableWithoutFeedback>
+
       </View>
         <View style={styles.tagContainer}>
           {restaurant.tag.map((tag, index) => {
@@ -86,11 +89,11 @@ const RestaurantScreen = () => {
         </View>
         
 
-        <RestaurantRating onRating={handleRating} />
+        
         <View style={styles.gridContainer}>
           <View style={styles.leftColumn}>
             <RestaurantDescription />
-            <RestaurantReview />
+            <RestaurantReview score={restaurant.compteur.recommendationScore} totalReviews={restaurant.compteur.totalReviews} />
           </View>
           <View style={styles.rightColumn}>
             <RestaurantMap />

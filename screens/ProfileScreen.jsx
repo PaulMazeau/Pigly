@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList,  } from 'react-native';
+import { Dimensions, StyleSheet, Text, View, ScrollView, TouchableOpacity, FlatList,  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Reusable/Header';
 import { signOut } from 'firebase/auth';
@@ -9,6 +9,8 @@ import RestaurantContext from '../context/RestaurantContext';
 import RestaurantCard from '../components/Home/RestaurantCard';
 import { main } from '../constants/color';
 
+
+
 export default function ProfileScreen() {
     const navigation = useNavigation();
     const { profile, likes } = useUser();
@@ -16,6 +18,7 @@ export default function ProfileScreen() {
 
     const { restaurants } = useContext(RestaurantContext);
     const [favoriteRestaurants, setFavoriteRestaurants] = useState([]);
+
 
     useEffect(() => {
         // Filtrer pour obtenir uniquement les restaurants favoris basés sur les likes
@@ -75,7 +78,7 @@ export default function ProfileScreen() {
                         <RestaurantCard key={restaurant.id} restaurant={restaurant} />
                     ))
                 ) : (
-                    <Text>Aucun restaurant en favoris.</Text>
+                    <Text style={styles.restaurantLiked}>Aucun restaurant en favoris.</Text>
                 )}
             </ScrollView>
             <Text style={styles.goutsTitle}>Vos goûts :</Text>
@@ -102,25 +105,25 @@ export default function ProfileScreen() {
         </View>
     )
 }
-
+const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     title: {
-        fontSize: 27,
+        fontSize: width < 350 ? 24 : 27, // Plus petit sur les petits écrans
         fontWeight: 'bold',
         lineHeight: 50,
         textAlign: 'center',
         color: "#fff",
+    },
+    container: {
+        backgroundColor: main.LogoBlack,
+        flex: 1,
+        padding: 14,
     },
     restaurantLiked: {
         fontWeight: 'bold',
         lineHeight: 50,
         textAlign: 'left',
         color: "#fff",
-    },
-    container: {
-        backgroundColor: main.LogoBlack,
-        flex: 1,
-        padding: 14
     },
     containerCarrousel: {
         paddingTop: 10,
@@ -146,12 +149,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: '#333', // Couleur de fond pour chaque élément du menu
+        backgroundColor: '#333',
         paddingVertical: 12,
         paddingHorizontal: 20,
-        marginVertical: 8, // Espace entre les éléments du menu
-        width: 400, // Largeur fixe pour chaque élément du menu
-        borderRadius: 10, // Bord arrondi pour les éléments du menu
+        marginVertical: 8,
+        borderRadius: 10,
+        width: width - 28, // Prendre en compte le padding du container
     },
     menuItemText: {
         color: '#fff',
